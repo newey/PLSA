@@ -45,7 +45,7 @@ public class NormalDistribution implements Distribution {
 			return;
 		}
 		mean = obsXweightsSum/weightsSum;
-		variance = (obsXobsXweightsSum - 2*mean*obsXweightsSum)/weightsSum + mean*mean;
+		variance = (obsXobsXweightsSum)/weightsSum - mean*mean;
 
 		if (variance < 0 && variance > -(1E-8)) {
 			variance = 0;
