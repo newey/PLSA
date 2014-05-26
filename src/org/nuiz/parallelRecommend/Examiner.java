@@ -14,9 +14,9 @@ public class Examiner {
 		FileDataList rawData = new FileDataList (fileName, separator);
 		NormaliseData core = new NormaliseData(rawData, 5);
 
-		PLSA model = new PLSA(10, 3);
+		//PLSA model = new PLSA(10, 3);
 		
-		model.fit(new NormalisedDataList(rawData, core));
+		//model.fit(new NormalisedDataList(rawData, core));
 		
 		
 	}

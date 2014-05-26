@@ -10,13 +10,16 @@ public class Runner {
 		int folds = 5;
 		double normFactor = 10;
 		int iterations = 20;
-		int classes = 3;
+		int classes = 5;
 		
-		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratings.dat";
-		//String separator = "::";
-		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data";
-		String separator = "\t";
+		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratings.dat";
+		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
+		String separator = "::";
+		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data";
+		//String separator = "\t";
 		FileFolder rawData = new FileFolder (fileName, separator, folds, 1);
+		DataList userData = new UserFileDataList(userFileName, separator);
+		
 		
 		double RMS = 0;
 		double RMS2 = 0;
@@ -27,7 +30,7 @@ public class Runner {
 			NormaliseData core = new NormaliseData(rawData.getFoldTrainingData(i), normFactor);
 			DataList train = new NormalisedDataList(rawData.getFoldTrainingData(i), core);
 			DataList test = new NormalisedDataList(rawData.getFoldTestData(i), core);
-			Model m = new PLSA(iterations, classes);
+			Model m = new PLSA(iterations, classes, userData);
 			Rater r = new Rater(train, test, m, core);
 			double delta = r.RMS - RMS;
 			RMS += delta/(i+1);
@@ -36,6 +39,7 @@ public class Runner {
 			delta = r.ABS - ABS;
 			ABS += delta/(i+1);
 			ABS2 += delta*(r.ABS - ABS);
+			System.out.printf("ABS: %f\t RMS: %f\n", r.ABS, r.RMS);
 		}
 
 		System.out.printf("Folds: %d\tIterations: %d\tClasses: %d\tNorm fac: %f\n", folds, iterations, classes, normFactor);

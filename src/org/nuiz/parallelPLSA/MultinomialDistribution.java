@@ -28,7 +28,7 @@ public class MultinomialDistribution implements Distribution {
 	
 	@Override
 	public double getProb(double observation) {
-		return getProb(Math.round(observation));
+		return getProb((int) Math.round(observation));
 	}
 	
 	public double getProb(int observation) {
