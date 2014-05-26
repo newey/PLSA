@@ -12,13 +12,17 @@ import java.util.Vector;
 
 public class FileDataList implements DataList {
 	private Vector <Datum> data;
+	private int maxItem;
 	private int numUsers;
 	private int numItems;
+	private Set<Integer> users;
+	private Set<Integer> items;
 	
 	public FileDataList (String fileName, String separator) throws IOException {
 		data = new Vector<Datum>();
-		Set<Integer> users = new HashSet<Integer>();
-		Set<Integer> items = new HashSet<Integer>();
+		users = new HashSet<Integer>();
+		items = new HashSet<Integer>();
+		maxItem = -1;
 		
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
 		while (br.ready()){
@@ -28,6 +32,7 @@ public class FileDataList implements DataList {
 			data.add(currentDatum);
 			users.add(currentDatum.getUser());
 			items.add(currentDatum.getItem());
+			maxItem = maxItem < currentDatum.getItem() ? currentDatum.getItem() : maxItem;
 		}
 		br.close();
 
@@ -48,6 +53,21 @@ public class FileDataList implements DataList {
 	@Override
 	public int getNumItems() {
 		return numItems;
+	}
+
+	@Override
+	public int getMaxItem() {
+		return maxItem;
+	}
+
+	@Override
+	public Set<Integer> getUsers() {
+		return users;
+	}
+
+	@Override
+	public Set<Integer> getItems() {
+		return items;
 	}
 
 }

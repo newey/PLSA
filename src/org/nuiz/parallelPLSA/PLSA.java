@@ -1,8 +1,6 @@
 package org.nuiz.parallelPLSA;
 
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
 
 import org.nuiz.parallelRecommend.Model;
 import org.nuiz.parallelRecommend.Datum;
@@ -24,11 +22,8 @@ public class PLSA implements Model{
 	@Override
 	public void fit(DataList data) {
 		DistributionFactory distFactory = new NormalDistributionFactory();
-		Set<Integer> movies = new HashSet<Integer>();
-		for (Datum d : data){
-			if (!movies.contains(d.getItem())){
-				caTdm.addDisribution(d.getItem(), distFactory);
-			}
+		for (Integer i : data.getItems()){
+			caTdm.addDisribution(i, distFactory);
 		}
 		
 		for (int i = 0; i < steps; i++) {

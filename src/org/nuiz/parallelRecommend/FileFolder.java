@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 
 public class FileFolder{
 	private Vector<LinkedList<Datum>> folds;
 	private int numUsers;
 	private int numItems;
+	private int maxItem;
+	private Set<Integer> users;
+	private Set<Integer> items;
 	
 	public FileFolder(String fileName, String separator, int numFolds, int seed) throws IOException{
 		Random r = new Random();
@@ -28,25 +32,34 @@ public class FileFolder{
 		
 		numUsers = rawData.getNumUsers();
 		numItems = rawData.getNumItems();
+		maxItem = rawData.getMaxItem();
+		users = rawData.getUsers();
+		items = rawData.getItems();
 	}
 	
 	public DataList getFoldTrainingData(int foldNum) {
-		return new DataFoldList (folds, foldNum, numUsers, numItems);
+		return new DataFoldList (folds, foldNum, numUsers, numItems, maxItem, users, items);
 	}
 	
 	public DataList getFoldTestData(int foldNum) {
-		return new SingleDataList(folds.elementAt(foldNum), numUsers, numItems);
+		return new SingleDataList(folds.elementAt(foldNum), numUsers, numItems, maxItem, users, items);
 	}
 	
 	private class SingleDataList implements DataList {
-		Iterable <Datum> data;
-		int numUsers;
-		int numItems;
+		private Iterable <Datum> data;
+		private int numUsers;
+		private int numItems;
+		private int maxItem;
+		private Set<Integer> users;
+		private Set<Integer> items;
 		
-		public SingleDataList (Iterable<Datum> data, int numUsers, int numItems) {
+		public SingleDataList (Iterable<Datum> data, int numUsers, int numItems, int maxItem, Set<Integer> users, Set<Integer> items) {
 			this.data = data;
 			this.numItems = numItems;
 			this.numUsers = numUsers;
+			this.maxItem = maxItem;
+			this.users = users;
+			this.items = items;
 		}
 		
 		@Override
@@ -63,6 +76,21 @@ public class FileFolder{
 		public int getNumItems() {
 			return numItems;
 		}
+
+		@Override
+		public int getMaxItem() {
+			return maxItem;
+		}
+
+		@Override
+		public Set<Integer> getUsers() {
+			return users;
+		}
+
+		@Override
+		public Set<Integer> getItems() {
+			return items;
+		}
 		
 	}
 	
@@ -71,12 +99,18 @@ public class FileFolder{
 		private int numUsers;
 		private int numItems;
 		private Vector <LinkedList<Datum>> data;
+		private int maxItem;
+		private Set<Integer> users;
+		private Set<Integer> items;
 		
-		public DataFoldList (Vector <LinkedList<Datum>> data, int fold, int numUsers, int numItems) {
+		public DataFoldList (Vector <LinkedList<Datum>> data, int fold, int numUsers, int numItems, int maxItem, Set<Integer> users, Set<Integer> items) {
 			this.fold = fold;
 			this.numUsers = numUsers;
 			this.numItems = numItems;
 			this.data = data;
+			this.maxItem = maxItem;
+			this.users = users;
+			this.items = items;
 		}
 		
 		@Override
@@ -139,6 +173,21 @@ public class FileFolder{
 
 			@Override
 			public void remove() { }
+		}
+
+		@Override
+		public int getMaxItem() {
+			return maxItem;
+		}
+
+		@Override
+		public Set<Integer> getUsers() {
+			return users;
+		}
+
+		@Override
+		public Set<Integer> getItems() {
+			return items;
 		}
 	}
 }

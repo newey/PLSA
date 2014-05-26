@@ -26,7 +26,11 @@ public class ClassAttributeToDistributionMap {
 	}
 	
 	public double getProb (int key, int cl, double observation) {
-		return distributions[cl].get(key).getProb(observation);
+		double retval = distributions[cl].get(key).getProb(observation);
+		if (Double.isNaN(retval)) {
+			throw new ArithmeticException();
+		}
+		return retval;
 	}
 	
 	public double getGuess (int key, int cl){

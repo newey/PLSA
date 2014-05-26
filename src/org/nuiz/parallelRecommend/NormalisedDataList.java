@@ -1,6 +1,7 @@
 package org.nuiz.parallelRecommend;
 
 import java.util.Iterator;
+import java.util.Set;
 
 public class NormalisedDataList implements DataList {
 	private DataList data;
@@ -54,6 +55,21 @@ public class NormalisedDataList implements DataList {
 	@Override
 	public int getNumItems() {
 		return data.getNumItems();
+	}
+
+	@Override
+	public int getMaxItem() {
+		return data.getMaxItem();
+	}
+
+	@Override
+	public Set<Integer> getUsers() {
+		return data.getUsers();
+	}
+
+	@Override
+	public Set<Integer> getItems() {
+		return data.getItems();
 	}
 
 }
