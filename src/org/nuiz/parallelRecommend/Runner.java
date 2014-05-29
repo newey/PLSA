@@ -2,15 +2,17 @@ package org.nuiz.parallelRecommend;
 
 import java.io.IOException;
 
+import org.nuiz.guessUserMean.GuessZero;
 import org.nuiz.parallelPLSA.PLSA;
+import org.nuiz.slopeOne.SlopeOne;
 
 public class Runner {
 
 	public static void main(String[] args) throws IOException {
 		int folds = 5;
 		double normFactor = 10;
-		int iterations = 20;
-		int classes = 20;
+		int iterations = 60;
+		int classes = 5;
 		
 		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratings.dat";
 		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
@@ -32,6 +34,8 @@ public class Runner {
 			DataList train = new NormalisedDataList(trainingData, core);
 			DataList test = new NormalisedDataList(rawData.getFoldTestData(i), core);
 			Model m = new PLSA(iterations, classes, userData);
+			//Model m = new GuessZero();
+			//Model m = new SlopeOne();
 			Rater r = new Rater(train, test, m, core);
 			double delta = r.RMS - RMS;
 			RMS += delta/(i+1);

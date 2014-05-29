@@ -1,8 +1,8 @@
 package org.nuiz.parallelRecommend;
 
 public class Pair <A, B> {
-	protected A a;
-	protected B b;
+	public A a;
+	public B b;
 	
 	public Pair (A a, B b){
 		this.a = a;
@@ -11,7 +11,7 @@ public class Pair <A, B> {
 	
 	@Override
 	public int hashCode (){
-		return a.hashCode() ^ b.hashCode();
+		return a.hashCode() ^ b.hashCode()*137;
 	}
 	
 	@SuppressWarnings("unchecked")
