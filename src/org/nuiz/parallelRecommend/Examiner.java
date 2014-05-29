@@ -14,8 +14,8 @@ public class Examiner {
 
 	public static void main(String[] args) throws IOException {
 		double normFactor = 10;
-		int iterations = 10;
-		int classes = 2;
+		int iterations = 30;
+		int classes = 20;
 		
 		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratings.dat";
 		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
@@ -29,8 +29,8 @@ public class Examiner {
 		PLSA model = new PLSA(iterations, classes, userData);
 		model.fit(new NormalisedDataList(rawData, core));
 		
-		Vector <Vector<OrderedPair<Double, String>>> ratings =
-				new Vector <Vector<OrderedPair<Double, String>>>();
+		Vector <Vector<OrderedPair<Double, Integer>>> ratings =
+				new Vector <Vector<OrderedPair<Double, Integer>>>();
 		
 		HashMap<Integer, String> movieTitles = new HashMap<Integer, String>();
 		
@@ -44,19 +44,26 @@ public class Examiner {
 			movieTitles.put(movie, title);
 		}
 
-
+		HashMap<Integer, Integer> numMovieRatings = new HashMap<Integer, Integer>();
+		for (Datum d: rawData) {
+			if (!numMovieRatings.containsKey(d.getItem())){
+				numMovieRatings.put(d.getItem(), 1);
+			} else {
+				numMovieRatings.put(d.getItem(), numMovieRatings.get(d.getItem())+1);
+			}
+		}
+		
 		brm.close();
 		for (int i = 0; i < classes; i++){
-			Vector<OrderedPair<Double, String>> cratings = new Vector<OrderedPair<Double, String>>();
+			Vector<OrderedPair<Double, Integer>> cratings = new Vector<OrderedPair<Double, Integer>>();
 			ratings.add(cratings);
 			for (Integer movie : rawData.getItems()) {
-				cratings.add(new OrderedPair<Double,String>(model.getItemRatingForClass(movie, i), movieTitles.get(movie)));
+				cratings.add(new OrderedPair<Double,Integer>(model.getItemRatingForClass(movie, i), movie));
 			}
 			Collections.sort(cratings);
 			
-			System.out.printf("Class %d:\n", i);
-			for (int j = 0; j < 30; j++){
-				System.out.printf("%f %s:\n", cratings.elementAt(j).a, cratings.elementAt(j).b);
+			for (OrderedPair<Double, Integer> op : cratings){
+				System.out.printf("%d %d %f %s\n", i, numMovieRatings.get(op.b), op.a, movieTitles.get(op.b));
 			}
 		}
 		

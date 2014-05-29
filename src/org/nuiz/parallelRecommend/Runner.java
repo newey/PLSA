@@ -9,8 +9,8 @@ public class Runner {
 	public static void main(String[] args) throws IOException {
 		int folds = 5;
 		double normFactor = 10;
-		int iterations = 10;
-		int classes = 2;
+		int iterations = 20;
+		int classes = 20;
 		
 		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratings.dat";
 		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
