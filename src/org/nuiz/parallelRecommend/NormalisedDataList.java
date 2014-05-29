@@ -4,47 +4,48 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class NormalisedDataList implements DataList {
-	private DataList data;
 	private NormaliseData core;
+	private DataList data;
 	
-	public NormalisedDataList (DataList data, double normalisationFactor){
-		this.data = data;
-		core = new NormaliseData(data, normalisationFactor);
-	}
-	
-	public NormalisedDataList (DataList data, NormaliseData core){
+	public NormalisedDataList (DataList data, NormaliseData core) {
 		this.data = data;
 		this.core = core;
 	}
 	
 	@Override
 	public Iterator<Datum> iterator() {
-		class NormalIterator implements Iterator<Datum> {
-			private NormaliseData core;
-			private Iterator <Datum> it;
-			
-			public NormalIterator (DataList data, NormaliseData core) {
-				this.core = core;
-				it = data.iterator();
-			}
-			
-			@Override
-			public boolean hasNext() {
-				return it.hasNext();
-			}
+		return new NormalIterator(data.iterator(), core);
+	}
 
-			@Override
-			public Datum next() {
-				Datum d = it.next();
-				double newRating = core.normaliseUserRating(d.getUser(), d.getRating());
-				return new Datum(d.getUser(), d.getItem(), newRating, d.getTimestamp());
-			}
-
-			@Override
-			public void remove() {}
-			
+	@Override
+	public Iterator<Datum> iterator(int from, int to) {
+		return new NormalIterator(data.iterator(from, to), core);
+	}
+	
+	class NormalIterator implements Iterator<Datum> {
+		private NormaliseData core;
+		private Iterator <Datum> it;
+		
+		public NormalIterator (Iterator<Datum> it, NormaliseData core) {
+			this.it = it;
+			this.core = core;
 		}
-		return new NormalIterator(data, core);
+		
+		@Override
+		public boolean hasNext() {
+			return it.hasNext();
+		}
+
+		@Override
+		public Datum next() {
+			Datum d = it.next();
+			double newRating = core.normaliseUserRating(d.getUser(), d.getRating());
+			return new Datum(d.getUser(), d.getItem(), newRating, d.getTimestamp());
+		}
+
+		@Override
+		public void remove() {}
+		
 	}
 
 	@Override
@@ -60,6 +61,11 @@ public class NormalisedDataList implements DataList {
 	@Override
 	public int getMaxItem() {
 		return data.getMaxItem();
+	}
+
+	@Override
+	public int getSize() {
+		return data.getSize();
 	}
 
 	@Override

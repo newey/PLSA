@@ -9,8 +9,8 @@ public class Runner {
 	public static void main(String[] args) throws IOException {
 		int folds = 5;
 		double normFactor = 10;
-		int iterations = 20;
-		int classes = 5;
+		int iterations = 10;
+		int classes = 2;
 		
 		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratings.dat";
 		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
@@ -27,8 +27,9 @@ public class Runner {
 		double ABS2 = 0;
 		
 		for (int i = 0; i < folds; i++) {
-			NormaliseData core = new NormaliseData(rawData.getFoldTrainingData(i), normFactor);
-			DataList train = new NormalisedDataList(rawData.getFoldTrainingData(i), core);
+			DataList trainingData = rawData.getFoldTrainingData(i);
+			NormaliseData core = new NormaliseData(trainingData, normFactor);
+			DataList train = new NormalisedDataList(trainingData, core);
 			DataList test = new NormalisedDataList(rawData.getFoldTestData(i), core);
 			Model m = new PLSA(iterations, classes, userData);
 			Rater r = new Rater(train, test, m, core);

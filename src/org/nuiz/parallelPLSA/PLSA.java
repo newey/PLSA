@@ -84,4 +84,8 @@ public class PLSA implements Model{
 		caTdm.finaliseRound();
 	}
 	
+	public double getItemRatingForClass(int item, int cl){
+		return caTdm.getGuess(item, cl);
+	}
+	
 }
