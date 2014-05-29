@@ -1,14 +1,15 @@
 package org.nuiz.parallelPLSA;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UserClasses {
-	private HashMap <Integer, MultinomialDistribution> userToClassProb;
+	private Map <Integer, MultinomialDistribution> userToClassProb;
 	private int numClasses;
 	
 	public UserClasses (int numClasses) {
 		this.numClasses = numClasses;
-		userToClassProb = new HashMap<Integer, MultinomialDistribution>();
+		userToClassProb = new ConcurrentHashMap<Integer, MultinomialDistribution>();
 	}
 	
 	public double getProb (int user, int cl){

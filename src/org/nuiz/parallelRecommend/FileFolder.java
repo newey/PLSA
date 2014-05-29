@@ -11,7 +11,7 @@ public class FileFolder{
 	private Set<Integer> users;
 	private Set<Integer> items;
 	
-	public FileFolder(String fileName, String separator, int numFolds, int seed) throws IOException{
+	public FileFolder(String fileName, String separator, int numFolds, int seed, boolean isBinary) throws IOException{
 		Random r = new Random();
 		r.setSeed(seed);
 		
@@ -20,7 +20,7 @@ public class FileFolder{
 			folds.add(i, new Vector<Datum>());
 		}
 		
-		DataList rawData = new FileDataList(fileName, separator);
+		DataList rawData = isBinary ? new BinaryFileDataList(fileName) : new FileDataList(fileName, separator);
 		
 		for (Datum d : rawData) {
 			folds.elementAt(r.nextInt(numFolds)).add(d);

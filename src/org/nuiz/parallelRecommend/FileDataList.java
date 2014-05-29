@@ -15,7 +15,7 @@ public class FileDataList extends DataListImpl {
 		while (br.ready()){
 			Scanner tk = new Scanner(br.readLine());
 			tk.useDelimiter(separator);
-			Datum currentDatum = new Datum(tk.nextInt(), tk.nextInt(),tk.nextInt(), tk.nextInt());
+			Datum currentDatum = new Datum(tk.nextInt(), tk.nextInt(),tk.nextFloat(),(int) tk.nextLong());
 			data.add(currentDatum);
 		}
 		br.close();

@@ -1,11 +1,15 @@
 package org.nuiz.parallelPLSA;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class NormalDistribution implements Distribution {
 	double mean;
 	double variance;
 	double obsXobsXweightsSum;
 	double obsXweightsSum;
 	double weightsSum;
+	private final Lock lock = new ReentrantLock();
 	
 	public NormalDistribution (){
 		mean = 0;
@@ -34,9 +38,11 @@ public class NormalDistribution implements Distribution {
 		if (Double.isNaN(observation) || Double.isNaN(weighting)) {
 			throw new ArithmeticException();
 		}
+		lock.lock();
 		obsXobsXweightsSum += observation*observation*weighting;
 		obsXweightsSum += observation*weighting;
 		weightsSum += weighting;
+		lock.unlock();
 	}
 
 	@Override

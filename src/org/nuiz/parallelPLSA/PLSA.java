@@ -1,6 +1,14 @@
 package org.nuiz.parallelPLSA;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Vector;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.nuiz.parallelRecommend.Model;
 import org.nuiz.parallelRecommend.Datum;
@@ -41,10 +49,14 @@ public class PLSA implements Model{
 			caTdm.addDisribution(i, distFactory);
 		}
 		
+		BlockingQueue<Runnable> work = new LinkedBlockingQueue<Runnable>();
+		ThreadPoolExecutor ex = new ThreadPoolExecutor(4, 4, 60, TimeUnit.SECONDS, work);
 		
 		for (int i = 0; i < steps; i++) {
-			emStep(data);
+			emStep(data, ex);
 		}
+		
+		ex.shutdown();
 	}
 
 	@Override
@@ -61,11 +73,55 @@ public class PLSA implements Model{
 		return results;
 	}
 
-	private void emStep(DataList data){
-		double[] perClass = new double[classes];
-		double sum = 0;
+	private void emStep(DataList data, ThreadPoolExecutor ex) {
+		Vector<Future<?>> tasks = new Vector<Future<?>>();
+		int splits = 4;
 		for (DataList dl : userData != null ? new DataList[]{data, userData} : new DataList[]{data}) {
-			for (Datum d : dl) {
+			int splitSize = dl.getSize()/splits;
+			int prev = 0;
+			for (int i = 0; i < splits-1; i++){
+				Runnable r = new EmStepRunnable(dl.iterator(prev, prev+splitSize));
+				tasks.add(ex.submit(r));
+				prev += splitSize;
+			}
+			Runnable r = new EmStepRunnable(dl.iterator(prev, dl.getSize()));
+			tasks.add(ex.submit(r));
+		}
+		
+		for (Future <?> f : tasks){
+			try {
+				f.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			}
+		}
+		
+		userClasses.finaliseRound();
+		caTdm.finaliseRound();
+	}
+	
+	public double getItemRatingForClass(int item, int cl){
+		return caTdm.getGuess(item, cl);
+	}
+	
+	private class EmStepRunnable implements Runnable {
+		Iterator<Datum> it;
+		public EmStepRunnable (Iterator<Datum> it) {
+			//System.err.println("Constructed an EmStep");
+			this.it = it;
+		}
+		
+		@Override
+		public void run() {
+			//System.err.println("Running an EmStep");
+			double sum;
+			double[] perClass = new double[classes];
+			while (it.hasNext()) {
+				Datum d = it.next();
 				sum = 0;
 				for (int c = 0; c < classes; c++){
 					perClass[c] = caTdm.getProb(d.getItem(), c, d.getRating())*
@@ -79,13 +135,7 @@ public class PLSA implements Model{
 					caTdm.addObservation(d.getItem(), c, d.getRating(), perClass[c]);
 				}
 			}
-		}
-		userClasses.finaliseRound();
-		caTdm.finaliseRound();
+			//System.err.println("Ran an EmStep");
+		}	
 	}
-	
-	public double getItemRatingForClass(int item, int cl){
-		return caTdm.getGuess(item, cl);
-	}
-	
 }
