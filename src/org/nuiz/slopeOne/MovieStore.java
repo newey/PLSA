@@ -2,7 +2,7 @@ package org.nuiz.slopeOne;
 
 import java.util.HashMap;
 
-public class MovieStore {
+class MovieStore {
 	HashMap<Integer, HashMap<Integer, Double>> slopes;
 	HashMap<Integer, HashMap<Integer, Integer>> counts;
 	

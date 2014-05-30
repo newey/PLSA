@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.Vector;
 
-public class FileDataList extends DataListImpl {
+class FileDataList extends DataListImpl {
 
 	public FileDataList (String fileName, String separator) throws IOException {
 		Vector<Datum> data = new Vector<Datum>();

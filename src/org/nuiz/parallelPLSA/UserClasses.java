@@ -3,7 +3,7 @@ package org.nuiz.parallelPLSA;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class UserClasses {
+class UserClasses {
 	private Map <Integer, MultinomialDistribution> userToClassProb;
 	private int numClasses;
 	

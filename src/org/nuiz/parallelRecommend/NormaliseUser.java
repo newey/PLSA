@@ -1,7 +1,7 @@
 package org.nuiz.parallelRecommend;
 
 
-public class NormaliseUser {
+class NormaliseUser {
 	private double mean = 0;
 	private double meansq = 0;
 	private int count = 0;

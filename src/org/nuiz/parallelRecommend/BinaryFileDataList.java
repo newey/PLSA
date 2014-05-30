@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Vector;
 
-public class BinaryFileDataList extends DataListImpl {
+class BinaryFileDataList extends DataListImpl {
 
 	public BinaryFileDataList (String fileName) throws IOException {
 		Vector<Datum> data = new Vector<Datum>();

@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.Vector;
 
 
-public class DataFoldList implements DataList {
+class DataFoldList implements DataList {
 	Vector <Vector<Datum>> data;
 	Set <Integer> users;
 	Set <Integer> items;

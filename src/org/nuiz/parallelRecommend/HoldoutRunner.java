@@ -11,9 +11,9 @@ public class HoldoutRunner {
 		int iterations = 60;
 		int classes = 5;
 		
-		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat";
+		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat";
 		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
-		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-10M100K/ratingsBin.dat";
+		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-10M100K/ratingsBin.dat";
 		String separator = "::";
 		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data";
 		//String separator = "\t";

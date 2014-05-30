@@ -3,7 +3,7 @@ package org.nuiz.parallelRecommend;
 import java.util.Iterator;
 import java.util.Set;
 
-public class NormalisedDataList implements DataList {
+class NormalisedDataList implements DataList {
 	private NormaliseData core;
 	private DataList data;
 	

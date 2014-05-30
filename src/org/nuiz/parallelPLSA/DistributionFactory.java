@@ -1,5 +1,5 @@
 package org.nuiz.parallelPLSA;
 
-public interface DistributionFactory {
+interface DistributionFactory {
 	public Distribution makeDistribution();
 }

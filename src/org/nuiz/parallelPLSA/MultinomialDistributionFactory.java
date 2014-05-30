@@ -1,6 +1,6 @@
 package org.nuiz.parallelPLSA;
 
-public class MultinomialDistributionFactory implements DistributionFactory {
+class MultinomialDistributionFactory implements DistributionFactory {
 	int classes;
 	public MultinomialDistributionFactory(int classes){
 		this.classes = classes;

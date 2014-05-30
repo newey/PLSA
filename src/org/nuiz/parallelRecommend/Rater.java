@@ -2,7 +2,7 @@ package org.nuiz.parallelRecommend;
 
 import java.util.Iterator;
 
-public class Rater {
+class Rater {
 	double RMS = 0;
 	double ABS = 0;
 	

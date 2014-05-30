@@ -3,7 +3,7 @@ package org.nuiz.parallelPLSA;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class NormalDistribution implements Distribution {
+class NormalDistribution implements Distribution {
 	double mean;
 	double variance;
 	double obsXobsXweightsSum;

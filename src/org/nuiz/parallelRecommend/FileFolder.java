@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
-public class FileFolder{
+class FileFolder{
 	private Vector<Vector<Datum>> folds;
 	private int maxItem;
 	private Set<Integer> users;

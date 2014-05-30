@@ -1,6 +1,6 @@
 package org.nuiz.parallelPLSA;
 
-public interface Distribution {
+interface Distribution {
 	// returns the probability of a given observation
 	public double getProb (double observation);
 	

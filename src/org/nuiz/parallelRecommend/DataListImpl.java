@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-public class DataListImpl implements DataList  {
+class DataListImpl implements DataList  {
 	private Vector<Datum> data = null;
 	private Set<Integer> users = null;
 	private Set<Integer> items = null;

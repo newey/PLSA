@@ -2,7 +2,7 @@ package org.nuiz.parallelPLSA;
 
 import java.util.Random;
 
-public class MultinomialDistribution implements Distribution {
+class MultinomialDistribution implements Distribution {
 	private double params[];
 	private double newParams[];
 	private int classes;

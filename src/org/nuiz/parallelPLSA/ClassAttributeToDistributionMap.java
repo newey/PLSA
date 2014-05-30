@@ -2,7 +2,7 @@ package org.nuiz.parallelPLSA;
 
 import java.util.HashMap;
 
-public class ClassAttributeToDistributionMap {
+class ClassAttributeToDistributionMap {
 	HashMap <Integer, Distribution>[] distributions;
 	int classes;
 	
