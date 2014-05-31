@@ -13,16 +13,15 @@ import java.util.Vector;
 
 public class UserExaminer {
 
-	public UserExaminer (DataList dataList, Model model, int user, OutputStream outputFile) throws IOException {
+	public UserExaminer (DataList dataList, Model model, int user, String moviesFile, String separator, OutputStream outputFile) throws IOException {
 		model.fit(dataList);
 		PrintStream outPrint = new PrintStream(outputFile);
 		HashMap<Integer, String> movieTitles = new HashMap<Integer, String>();
 		
-		BufferedReader brm = new BufferedReader(new FileReader("/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1M/movies.dat"));
+		BufferedReader brm = new BufferedReader(new FileReader(moviesFile));
 		while (brm.ready()){
 			Scanner tk = new Scanner(brm.readLine());
-			//tk.useDelimiter("\\|");
-			tk.useDelimiter("::");
+			tk.useDelimiter(separator);
 			int movie = tk.nextInt();
 			String title = new String(tk.next());
 			movieTitles.put(movie, title);

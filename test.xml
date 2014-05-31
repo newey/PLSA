@@ -37,7 +37,7 @@
 		<folds>5</folds>
 	</crossVal> -->
 	<examineUser>
-		<outputFile>-</outputFile>
+		<outputFile>/Users/robert/user1rec.txt</outputFile>
 		<normaliseDataList>
 			<normalisationFactor>0.01</normalisationFactor>
 			<binaryFileDatalist>
@@ -50,5 +50,7 @@
 			<holdOutCases>100001</holdOutCases>
 		</plsa>
 		<userNumber>1</userNumber>
+		<movieFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1M/movies.dat</movieFile>
+		<separator>::</separator>
 	</examineUser>
 </config>

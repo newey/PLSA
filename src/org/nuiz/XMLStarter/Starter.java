@@ -92,8 +92,10 @@ public class Starter {
 	
 	private static void examineUserParser(OutputStream outStream, DataList dataList, Model model, Node node) throws IOException {
 		int userNumber = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
+		String moviesFile = node.getChildNodes().item(9).getTextContent();
+		String separator = node.getChildNodes().item(11).getTextContent();
 		System.out.printf("examineUser: %d\n", userNumber);
-		new UserExaminer(dataList, model, userNumber, outStream);
+		new UserExaminer(dataList, model, userNumber, moviesFile, separator, outStream);
 	}
 	
 	private static DataList dataListParser(Node dataListNode) throws IOException {

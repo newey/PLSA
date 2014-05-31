@@ -18,9 +18,9 @@ public class BinaryFileDataList extends DataListImpl {
 		double rating;
 		while (sizeleft > 0){
 			br.read(cdata);
-			user = cdata[0]*(1<<24) + cdata[1]*(1<<16) + cdata[2]*(1<<8) + cdata[3];
-			movie = cdata[4]*(1<<24) + cdata[5]*(1<<16) + cdata[6]*(1<<8) + cdata[7];
-			rating = cdata[8]/2.0;
+			user = b2ub(cdata[0])*(1<<24) + b2ub(cdata[1])*(1<<16) + b2ub(cdata[2])*(1<<8) + b2ub(cdata[3]);
+			movie = b2ub(cdata[4])*(1<<24) + b2ub(cdata[5])*(1<<16) + b2ub(cdata[6])*(1<<8) + b2ub(cdata[7]);
+			rating = b2ub(cdata[8])/2.0;
 			Datum currentDatum = new Datum(user, movie, rating,0);
 			data.add(currentDatum);
 			sizeleft -= cdata.length;
@@ -41,5 +41,13 @@ public class BinaryFileDataList extends DataListImpl {
 		
 		
 		super.loadData(data);
+	}
+	
+	private int b2ub(byte b) {
+		int a = b;
+		if (b < 0) {
+			a += 256;
+		}
+		return a;
 	}
 }

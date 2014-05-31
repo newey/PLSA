@@ -99,6 +99,8 @@
 			<xs:extension base="Runner">
 				<xs:sequence>
 					<xs:element name="userNumber" type="xs:integer"/>
+					<xs:element name="movieFile" type="xs:string"/>
+					<xs:element name="separator" type="xs:string"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
