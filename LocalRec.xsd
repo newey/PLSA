@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd"
+           elementFormDefault="qualified">
+	<xs:element name="config">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="globalSettings">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="numThreads" type="xs:integer"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:choice maxOccurs="unbounded">
+					<xs:element name="holdOut" type="HoldOut"/>
+					<xs:element name="crossVal" type="CrossVal"/>
+					<xs:element name="examineUser" type="ExamineUser"/>
+				</xs:choice>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Begin DataList description -->
+	<xs:complexType name="DataList" abstract="true"/>
+	<xs:complexType name="FileDataList">
+		<xs:complexContent>
+			<xs:extension base="DataList">
+				<xs:sequence>
+					<xs:element name="inputFile" type="xs:string"/>
+					<xs:element name="separator" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="BinaryFileDataList">
+		<xs:complexContent>
+			<xs:extension base="DataList">
+				<xs:sequence>
+					<xs:element name="inputFile" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="NormaliseDataList">
+		<xs:complexContent>
+			<xs:extension base="DataList">
+				<xs:sequence>
+					<xs:element name="normalisationFactor" type="xs:float"/>
+					<xs:choice>
+						<xs:element name="fileDatalist" type="FileDataList"/>
+						<xs:element name="binaryFileDatalist" type="BinaryFileDataList"/>
+					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!-- End DataList description -->
+	
+	
+	<!-- Begin Runner description -->
+	<xs:complexType name="Runner" abstract="true">
+		<xs:sequence>
+			<xs:element name="outputFile" type="xs:string"/>
+			<xs:choice>
+				<xs:element name="fileDatalist" type="FileDataList"/>
+				<xs:element name="binaryFileDatalist" type="BinaryFileDataList"/>
+				<xs:element name="normaliseDataList" type="NormaliseDataList"/>
+			</xs:choice>
+			<xs:choice>
+				<xs:element name="plsa" type="PLSA"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HoldOut">
+		<xs:complexContent>
+			<xs:extension base="Runner">
+				<xs:sequence>
+					<xs:element name="randomSeed" type="xs:integer"/>
+					<xs:element name="testSize" type="xs:integer"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CrossVal">
+		<xs:complexContent>
+			<xs:extension base="Runner">
+				<xs:sequence>
+					<xs:element name="randomSeed" type="xs:integer"/>
+					<xs:element name="folds" type="xs:integer"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ExamineUser">
+		<xs:complexContent>
+			<xs:extension base="Runner">
+				<xs:sequence>
+					<xs:element name="userNumber" type="xs:integer"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!-- End Runner description -->
+	
+	
+	<!-- Begin Models description -->
+	<xs:complexType name="Model" abstract="true"/>
+	<xs:complexType name="PLSA">
+		<xs:complexContent>
+			<xs:extension base="Model">
+				<xs:sequence>
+					<xs:element name="steps" type="xs:integer"/>
+					<xs:element name="classes" type="xs:integer"/>
+					<xs:element name="holdOutCases" type="xs:integer"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!-- End Models description -->
+		
+</xs:schema>

@@ -3,7 +3,7 @@ package org.nuiz.parallelRecommend;
 import java.util.Iterator;
 import java.util.Set;
 
-class NormalisedDataList implements DataList {
+public class NormalisedDataList implements DataList {
 	private NormaliseData core;
 	private DataList data;
 	
@@ -76,6 +76,21 @@ class NormalisedDataList implements DataList {
 	@Override
 	public Set<Integer> getItems() {
 		return data.getItems();
+	}
+
+	@Override
+	public DataList getSubDataList(int from, int to) {
+		return new NormalisedDataList(data.getSubDataList(from, to), core);
+	}
+
+	@Override
+	public double normaliseRating(Datum data) {
+		return core.normaliseUserRating(data.getUser(), data.getRating());
+	}
+
+	@Override
+	public double denormaliseRating(int user, double rating) {
+		return core.denormaliseUserRating(user, rating);
 	}
 
 }

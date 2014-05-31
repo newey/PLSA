@@ -1,45 +1,23 @@
 package org.nuiz.parallelRecommend;
 
 import java.io.IOException;
-
-import org.nuiz.parallelPLSA.PLSA;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class HoldoutRunner {
-	public static void main(String[] args) throws IOException {
-		int folds = 5;
-		double normFactor = 10;
-		int iterations = 60;
-		int classes = 5;
-		
-		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat";
-		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
-		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-10M100K/ratingsBin.dat";
-		String separator = "::";
-		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data";
-		//String separator = "\t";
-		//FileFolder rawData = new FileFolder (fileName, separator, folds, 1);
-		FileFolder rawData = new FileFolder (fileName, separator, folds, 1, true);
-		//DataList userData = new UserFileDataList(userFileName, separator);
+	DataList dataList;
+	Model model;
 	
-		System.out.printf("Read in input");
+	public HoldoutRunner(DataList data, Model model, int seed, int testSize,
+			OutputStream outputFile) throws IOException {		
+		PrintStream outPrint = new PrintStream(outputFile);
 		
-		DataList userData = null;
+		DataList testData = data.getSubDataList(0, testSize);
+		DataList trainData = data.getSubDataList(testSize, data.getSize());
 		
 		
-		DataList trainingData = rawData.getFoldTrainingData(0);
-		NormaliseData core = new NormaliseData(trainingData, normFactor);
-		DataList train = new NormalisedDataList(trainingData, core);
-		DataList test = new NormalisedDataList(rawData.getFoldTestData(0), core);
-		Model m = new PLSA(iterations, classes, userData);
-		//Model m = new GuessZero();
-		//Model m = new SlopeOne();
-		Rater r = new Rater(train, test, m, core);
+		Rater r = new Rater(trainData, testData, model);
 		
-
-		System.out.printf("Folds: %d\tIterations: %d\tClasses: %d\tNorm fac: %f\n", folds, iterations, classes, normFactor);
-		System.out.printf("ABS: %f\t RMS: %f\n", r.ABS, r.RMS);
-		
-
-
+		outPrint.printf("ABS: %f\t RMS: %f\n", r.ABS, r.RMS);
 	}
 }

@@ -7,7 +7,7 @@ class Rater {
 	double ABS = 0;
 	
 	
-	public Rater (DataList train, DataList test, Model model, NormaliseData normaliser){
+	public Rater (DataList train, DataList test, Model model){
 		model.fit(train);
 		Iterable <Double> preds = model.predict(test);
 		Iterator <Double> predIt = preds.iterator();
@@ -20,12 +20,9 @@ class Rater {
 		while (predIt.hasNext()) {
 			cPred = predIt.next();
 			cTruth = truthIt.next();
-			if (normaliser != null) {
-				cPred = normaliser.denormaliseUserRating(cTruth.getUser(), cPred);
-				cRat = normaliser.denormaliseUserRating(cTruth.getUser(), cTruth.getRating());
-			} else {
-				cRat = cTruth.getRating();
-			}
+			
+			cPred = train.denormaliseRating(cTruth.getUser(), cPred);
+			cRat = train.denormaliseRating(cTruth.getUser(), cTruth.getRating());
 			
 			double err = Math.abs(cRat - cPred);
 			RMS += err*err;

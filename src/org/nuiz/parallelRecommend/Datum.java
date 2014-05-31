@@ -1,12 +1,13 @@
 package org.nuiz.parallelRecommend;
 
 public class Datum {
-	private int user;
-	private int item;
-	private double rating;
-	private int timestamp;
+	private final int user;
+	private final int item;
+	private final double rating;
+	private final int timestamp;
 	
 	public Datum (int user, int item, double rating, int timestamp){
+
 		this.user = user;
 		this.item = item;
 		this.rating = rating;

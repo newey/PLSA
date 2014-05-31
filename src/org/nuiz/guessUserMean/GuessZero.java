@@ -1,5 +1,6 @@
 package org.nuiz.guessUserMean;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.nuiz.parallelRecommend.*;
@@ -13,7 +14,8 @@ public class GuessZero implements Model {
 	public Iterable<Double> predict(DataList data) {
 		Vector <Double> preds = new Vector<Double>();
 		
-		for (Datum d : data){
+		for (Iterator<Datum> iterator = data.iterator(); iterator.hasNext();) {
+			iterator.next();
 			preds.add(0.0);
 		}
 		return preds;

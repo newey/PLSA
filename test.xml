@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:ns="LocalRec"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="/Users/robert/Documents/ScalaWorkspace/LocalRec/LocalRec.xsd">
+	<globalSettings>
+		<numThreads>4</numThreads>
+	</globalSettings>
+	<!--<holdOut>
+		<outputFile>outfile.txt</outputFile>
+		<binaryFileDatalist>
+			<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
+		</binaryFileDatalist>
+		<plsa>
+			<steps>3</steps>
+			<classes>3</classes>
+			<holdOutCases>10000</holdOutCases>
+		</plsa>
+		<randomSeed>1</randomSeed>
+		<testSize>10000</testSize>
+	</holdOut>
+
+	<crossVal>
+		<outputFile>outfile.txt</outputFile>
+		<normaliseDataList>
+			<normalisationFactor>5</normalisationFactor>
+			<binaryFileDatalist>
+				<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
+			</binaryFileDatalist>
+		</normaliseDataList>
+		<plsa>
+			<steps>5</steps>
+			<classes>5</classes>
+			<holdOutCases>10000</holdOutCases>
+		</plsa>
+		<randomSeed>1</randomSeed>
+		<folds>5</folds>
+	</crossVal> -->
+	<examineUser>
+		<outputFile>-</outputFile>
+		<normaliseDataList>
+			<normalisationFactor>0.01</normalisationFactor>
+			<binaryFileDatalist>
+				<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
+			</binaryFileDatalist>
+		</normaliseDataList>
+		<plsa>
+			<steps>20</steps>
+			<classes>5</classes>
+			<holdOutCases>100001</holdOutCases>
+		</plsa>
+		<userNumber>1</userNumber>
+	</examineUser>
+</config>

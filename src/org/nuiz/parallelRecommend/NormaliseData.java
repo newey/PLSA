@@ -2,7 +2,7 @@ package org.nuiz.parallelRecommend;
 
 import java.util.HashMap;
 
-class NormaliseData {
+public class NormaliseData {
 	HashMap <Integer, NormaliseUser> mapping;
 	NormaliseUser population;
 	

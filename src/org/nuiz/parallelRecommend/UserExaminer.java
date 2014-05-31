@@ -3,35 +3,19 @@ package org.nuiz.parallelRecommend;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Vector;
 
-import org.nuiz.parallelPLSA.PLSA;
-import org.nuiz.slopeOne.SlopeOne;
-
 public class UserExaminer {
 
-	public static void main(String[] args) throws IOException {
-		double normFactor = 10;
-		int iterations = 20;
-		int classes = 5;
-		
-		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratings.dat";
-		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
-		String separator = "::";
-		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data";
-		//String separator = "\t";
-		DataList rawData = new FileDataList (fileName, separator);
-		DataList userData = new UserFileDataList(userFileName, separator);
-		
-		NormaliseData core = new NormaliseData(rawData, normFactor);
-		Model model = new PLSA(iterations, classes, userData);
-		//Model model = new SlopeOne();
-		model.fit(new NormalisedDataList(rawData, core));
-		
+	public UserExaminer (DataList dataList, Model model, int user, OutputStream outputFile) throws IOException {
+		model.fit(dataList);
+		PrintStream outPrint = new PrintStream(outputFile);
 		HashMap<Integer, String> movieTitles = new HashMap<Integer, String>();
 		
 		BufferedReader brm = new BufferedReader(new FileReader("/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1M/movies.dat"));
@@ -45,7 +29,7 @@ public class UserExaminer {
 		}
 
 		HashMap<Integer, Integer> numMovieRatings = new HashMap<Integer, Integer>();
-		for (Datum d: rawData) {
+		for (Datum d: dataList) {
 			if (!numMovieRatings.containsKey(d.getItem())){
 				numMovieRatings.put(d.getItem(), 1);
 			} else {
@@ -55,11 +39,11 @@ public class UserExaminer {
 		
 		brm.close();
 		
-		int[] usersToScore = new int[] {21};
+		int[] usersToScore = new int[] {user};
 		
 		for (Integer i : usersToScore) {
 			Vector <Datum> toRate = new Vector<Datum>();
-			for (int j : rawData.getItems()) {
+			for (int j : dataList.getItems()) {
 				toRate.add(new Datum(i, j, 0, 0));
 			}
 			DataList dl = new DataListImpl(toRate);
@@ -72,7 +56,7 @@ public class UserExaminer {
 			Collections.sort(ratingsToMovies);
 			
 			for (OrderedPair<Double, Integer> op : ratingsToMovies){
-				System.out.printf("%d %d %f %s\n", i, numMovieRatings.get(op.b), op.a, movieTitles.get(op.b));
+				outPrint.printf("%d %d %f %s\n", i, numMovieRatings.get(op.b), dataList.denormaliseRating(i, op.a), movieTitles.get(op.b));
 			}
 		}
 

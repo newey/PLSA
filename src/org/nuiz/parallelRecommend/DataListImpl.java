@@ -2,11 +2,11 @@ package org.nuiz.parallelRecommend;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 class DataListImpl implements DataList  {
-	private Vector<Datum> data = null;
+	private List<Datum> data = null;
 	private Set<Integer> users = null;
 	private Set<Integer> items = null;
 	private int maxItem = -1;
@@ -20,11 +20,18 @@ class DataListImpl implements DataList  {
 		maxItem = dli.maxItem;
 	}
 	
-	public DataListImpl(Vector<Datum> v) {
+	public DataListImpl(List<Datum> v) {
 		loadData(v);
 	}
 	
-	public void loadData(Vector<Datum> v) {
+	public DataListImpl(List<Datum> v, Set<Integer> users, Set<Integer> items, int maxItem) {
+		data = v;
+		this.users = users;
+		this.items = items;
+		this.maxItem = maxItem;
+	}
+	
+	public void loadData(List<Datum> v) {
 		users = new HashSet<Integer>();
 		items = new HashSet<Integer>();
 		data = v;
@@ -78,8 +85,23 @@ class DataListImpl implements DataList  {
 		return data.subList(from, to).iterator();
 	}
 
-	protected Vector<Datum> getData() {
+	protected List<Datum> getData() {
 		return data;
+	}
+
+	@Override
+	public DataList getSubDataList(int from, int to) {
+		return new DataListImpl(data.subList(from, to), users, items, maxItem);
+	}
+
+	@Override
+	public double normaliseRating(Datum data) {
+		return data.getRating();
+	}
+
+	@Override
+	public double denormaliseRating(int user, double rating) {
+		return rating;
 	}
 
 }

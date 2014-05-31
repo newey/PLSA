@@ -1,43 +1,46 @@
 package org.nuiz.parallelRecommend;
 
-import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Vector;
 
-import org.nuiz.guessUserMean.GuessZero;
-import org.nuiz.parallelPLSA.PLSA;
-import org.nuiz.slopeOne.SlopeOne;
 
 public class CVRunner {
 
-	public static void main(String[] args) throws IOException {
-		int folds = 5;
-		double normFactor = 10;
-		int iterations = 60;
-		int classes = 5;
-		
-		String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat";
-		String userFileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/users.dat";
-		String separator = "::";
-		//String fileName = "/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data";
-		//String separator = "\t";
-		FileFolder rawData = new FileFolder (fileName, separator, folds, 1, true);
-		DataList userData = new UserFileDataList(userFileName, separator);
-		
-		System.out.println("Read input");
-		
+	public CVRunner(DataList dataList, Model model, int randomSeed, int folds,
+			OutputStream out) {
 		double RMS = 0;
 		double RMS2 = 0;
 		double ABS = 0;
 		double ABS2 = 0;
+	
+		PrintStream outPrint = new PrintStream(out);
+		int foldSize = dataList.getSize()/folds;
+		Vector <Integer> boundaries = new Vector<Integer>();
+		for (int i = 0; i < folds; i++){
+			boundaries.add(i*foldSize);
+		}
+		boundaries.add(dataList.getSize());
 		
 		for (int i = 0; i < folds; i++) {
-			DataList trainingData = rawData.getFoldTrainingData(i);
-			NormaliseData core = new NormaliseData(trainingData, normFactor);
-			DataList train = new NormalisedDataList(trainingData, core);
-			DataList test = new NormalisedDataList(rawData.getFoldTestData(i), core);
-			Model m = new PLSA(iterations, classes, userData);
-			//Model m = new GuessZero();
-			//Model m = new SlopeOne();
-			Rater r = new Rater(train, test, m, core);
+			DataList train = null;
+			if (i == 0){
+				train = dataList.getSubDataList(boundaries.elementAt(1), dataList.getSize());
+			} else if (i == folds-1) {
+				train = dataList.getSubDataList(0, boundaries.elementAt(i));
+			} else {
+				Vector <DataList> dLists = new Vector<DataList> ();
+				DataList first = dataList.getSubDataList(0, boundaries.elementAt(i));
+				DataList second = dataList.getSubDataList(boundaries.elementAt(i), dataList.getSize());
+				dLists.add(first);
+				dLists.add(second);
+				train = new DataListMultiplexer(dLists, dataList.getUsers(), dataList.getItems(),dataList.getMaxItem());
+			}
+			
+			
+			DataList test = dataList.getSubDataList(boundaries.elementAt(i), boundaries.elementAt(i+1));
+
+			Rater r = new Rater(train, test, model);
 			double delta = r.RMS - RMS;
 			RMS += delta/(i+1);
 			RMS2 += delta*(r.RMS - RMS);
@@ -45,12 +48,11 @@ public class CVRunner {
 			delta = r.ABS - ABS;
 			ABS += delta/(i+1);
 			ABS2 += delta*(r.ABS - ABS);
-			System.out.printf("ABS: %f\t RMS: %f\n", r.ABS, r.RMS);
+			outPrint.printf("ABS: %f\t RMS: %f\n", r.ABS, r.RMS);
 		}
 
-		System.out.printf("Folds: %d\tIterations: %d\tClasses: %d\tNorm fac: %f\n", folds, iterations, classes, normFactor);
-		System.out.printf("RMS: %f\t RMS SD: %f\n", RMS, Math.sqrt(RMS2/(folds-1)));
-		System.out.printf("ABS: %f\t ABS SD: %f\n", ABS, Math.sqrt(ABS2/(folds-1)));
+		outPrint.printf("RMS: %f\t RMS SD: %f\n", RMS, Math.sqrt(RMS2/(folds-1)));
+		outPrint.printf("ABS: %f\t ABS SD: %f\n", ABS, Math.sqrt(ABS2/(folds-1)));
 
 	}
 

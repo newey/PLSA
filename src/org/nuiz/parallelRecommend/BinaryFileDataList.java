@@ -3,9 +3,10 @@ package org.nuiz.parallelRecommend;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Vector;
 
-class BinaryFileDataList extends DataListImpl {
+public class BinaryFileDataList extends DataListImpl {
 
 	public BinaryFileDataList (String fileName) throws IOException {
 		Vector<Datum> data = new Vector<Datum>();
@@ -25,6 +26,20 @@ class BinaryFileDataList extends DataListImpl {
 			sizeleft -= cdata.length;
 		}
 		br.close();
+
+		
+		Random r = new Random();
+		r.setSeed(100);
+		Datum a;
+		
+		for (int i = 0; i < data.size()-1; i++) {
+			int nextIndex = i+r.nextInt(data.size()-i);
+			a = data.elementAt(i);
+			data.setElementAt(data.elementAt(nextIndex), i);
+			data.setElementAt(a, nextIndex);
+		}
+		
+		
 		super.loadData(data);
 	}
 }

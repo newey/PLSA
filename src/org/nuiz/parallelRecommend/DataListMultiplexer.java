@@ -5,21 +5,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-
-class DataFoldList implements DataList {
-	Vector <List<Datum>> data;
+public class DataListMultiplexer implements DataList {
+	Vector <DataList> data;
 	Set <Integer> users;
 	Set <Integer> items;
 	int maxItem = -1;
 	int size = 0;
 	
-	public DataFoldList (Vector <List<Datum>> data, Set<Integer> users, Set<Integer> items, int maxItem) {
+	public DataListMultiplexer (Vector <DataList> data, Set<Integer> users, Set<Integer> items, int maxItem) {
 		this.data=data;
 		this.users = users;
 		this.items = items;
 		this.maxItem = maxItem;
-		for (List <Datum> vd : data) {
-			size += vd.size();
+		
+		for (DataList vd : data) {
+			size += vd.getSize();
 		}
 
 	}
@@ -27,7 +27,7 @@ class DataFoldList implements DataList {
 	@Override
 	public Iterator<Datum> iterator() {
 		List<Iterator<Datum>> v = new Vector<Iterator<Datum>>();
-		for (List<Datum> d : data) {
+		for (DataList d : data) {
 			v.add(d.iterator());
 		}
 		return new DatumIterator(v.iterator());
@@ -96,35 +96,35 @@ class DataFoldList implements DataList {
 		List<Iterator<Datum>> v = new Vector<Iterator<Datum>>();
 		int soFar = 0;
 		
-		for (List<Datum> d : data) {
-			if (soFar + d.size() < from || soFar >= to) {
-				soFar += d.size();
+		for (DataList d : data) {
+			if (soFar + d.getSize() < from || soFar >= to) {
+				soFar += d.getSize();
 				continue;
 			}
 			int startIndex = Math.max(0, from - soFar);
-			int endIndex = Math.min(d.size(), to - soFar);
-			v.add(d.subList(startIndex, endIndex).iterator());
-			soFar += d.size();
+			int endIndex = Math.min(d.getSize(), to - soFar);
+			v.add(d.getSubDataList(startIndex, endIndex).iterator());
+			soFar += d.getSize();
 		}
 		return new DatumIterator(v.iterator());
 	}
 
 	@Override
 	public DataList getSubDataList(int from, int to) {
-		Vector<List<Datum>> v = new Vector<List<Datum>>();
+		Vector<DataList> v = new Vector<DataList>();
 		int soFar = 0;
 		
-		for (List<Datum> d : data) {
-			if (soFar + d.size() < from || soFar >= to) {
-				soFar += d.size();
+		for (DataList d : data) {
+			if (soFar + d.getSize() < from || soFar >= to) {
+				soFar += d.getSize();
 				continue;
 			}
 			int startIndex = Math.max(0, from - soFar);
-			int endIndex = Math.min(d.size(), to - soFar);
-			v.add(d.subList(startIndex, endIndex));
-			soFar += d.size();
+			int endIndex = Math.min(d.getSize(), to - soFar);
+			v.add(d.getSubDataList(startIndex, endIndex));
+			soFar += d.getSize();
 		}
-		return new DataFoldList(v, users, items, maxItem);
+		return new DataListMultiplexer(v, users, items, maxItem);
 	}
 
 	@Override

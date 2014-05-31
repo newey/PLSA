@@ -22,14 +22,15 @@ class NormalDistribution implements Distribution {
 	@Override
 	public double getProb(double observation) {
 		if (variance == 0) {
-			return Math.abs(observation - mean) < 1e-8 ? 1.0 : 0.0;
+			return Math.abs(observation - mean) < 1e-8 ? 1.0 -1e-5 : 1e-5;
 		}
 		double exp = -(observation - mean)*(observation-mean)/(2*variance);
 		double base = 1/Math.sqrt(2*Math.PI*variance);
-		if (Double.isNaN(base)) {
+		double retval = Math.exp(exp)*base + 1e-14;
+		if (retval == 0 || Double.isNaN(retval)){
 			throw new ArithmeticException();
 		}
-		return Math.exp(exp)*base;
+		return retval;
 	}
 
 	@Override

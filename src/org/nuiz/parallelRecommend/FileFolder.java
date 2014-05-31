@@ -1,12 +1,13 @@
 package org.nuiz.parallelRecommend;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
 class FileFolder{
-	private Vector<Vector<Datum>> folds;
+	private Vector<List<Datum>> folds;
 	private int maxItem;
 	private Set<Integer> users;
 	private Set<Integer> items;
@@ -15,7 +16,7 @@ class FileFolder{
 		Random r = new Random();
 		r.setSeed(seed);
 		
-		folds = new Vector<Vector<Datum>>(numFolds);
+		folds = new Vector<List<Datum>>(numFolds);
 		for (int i = 0; i < numFolds; i++) {
 			folds.add(i, new Vector<Datum>());
 		}
@@ -32,7 +33,7 @@ class FileFolder{
 	}
 	
 	public DataList getFoldTrainingData(int foldNum) {
-		Vector <Vector<Datum>> cFolds = new Vector<Vector<Datum>>(folds.size()-1);
+		Vector <List<Datum>> cFolds = new Vector<List<Datum>>(folds.size()-1);
 		for (int i = 0; i < folds.size(); i++){
 			if (i != foldNum){
 				cFolds.add(folds.elementAt(i));

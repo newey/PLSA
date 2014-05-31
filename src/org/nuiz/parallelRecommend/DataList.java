@@ -12,4 +12,7 @@ public interface DataList extends Iterable<Datum> {
 	public Set<Integer> getItems();
 	public Iterator<Datum> iterator();
 	public Iterator<Datum> iterator(int from, int to);
+	public DataList getSubDataList (int from, int to);
+	public double normaliseRating(Datum data);
+	public double denormaliseRating(int user, double rating);
 }

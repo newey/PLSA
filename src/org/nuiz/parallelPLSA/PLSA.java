@@ -52,18 +52,45 @@ public class PLSA implements Model{
 		BlockingQueue<Runnable> work = new LinkedBlockingQueue<Runnable>();
 		ThreadPoolExecutor ex = new ThreadPoolExecutor(4, 4, 60, TimeUnit.SECONDS, work);
 		
-		for (int i = 0; i < steps; i++) {
-			emStep(data, ex);
+		double minSoFar = Double.POSITIVE_INFINITY;
+		double current;
+		
+		int prev = (data.getSize()/5)*4;
+		double retval = 0;
+		int count = 0;
+		
+		Iterator <Double> predIt = predict(data.iterator(prev, data.getSize())).iterator();
+		Iterator <Datum> dataIt = data.iterator(prev, data.getSize());
+		while (predIt.hasNext()) {
+			double diff = predIt.next() - dataIt.next().getRating();
+			retval += diff*diff;
+			count++;
 		}
+		
+		System.out.printf("Initial error: %f\n", retval/count);
+		
+		for (int i = 0; i < steps; i++) {
+			current = emStep(data, ex, true);
+			System.out.printf("Step %d: %f\n",i,  current);
+			minSoFar = current < minSoFar ? current : minSoFar;
+		}
+		
+		emStep(data, ex, false);
 		
 		ex.shutdown();
 	}
 
 	@Override
 	public Iterable<Double> predict(DataList data) {
+		Iterable<Double> results = predict(data.iterator());
+		return results;
+	}
+	
+	private Iterable<Double> predict (Iterator <Datum> data) {
 		LinkedList<Double> results = new LinkedList<Double>();
 		
-		for (Datum d : data) {
+		while (data.hasNext()) {
+			Datum d = data.next();
 			double guess = 0;
 			for (int c = 0; c < classes; c++){
 				guess += userClasses.getProb(d.getUser(), c)*caTdm.getGuess(d.getItem(), c);
@@ -73,18 +100,28 @@ public class PLSA implements Model{
 		return results;
 	}
 
-	private void emStep(DataList data, ThreadPoolExecutor ex) {
+	private double emStep(DataList data, ThreadPoolExecutor ex, boolean holdOut) {
 		Vector<Future<?>> tasks = new Vector<Future<?>>();
-		int splits = 4;
-		for (DataList dl : userData != null ? new DataList[]{data, userData} : new DataList[]{data}) {
-			int splitSize = dl.getSize()/splits;
-			int prev = 0;
-			for (int i = 0; i < splits-1; i++){
-				Runnable r = new EmStepRunnable(dl.iterator(prev, prev+splitSize));
-				tasks.add(ex.submit(r));
-				prev += splitSize;
-			}
-			Runnable r = new EmStepRunnable(dl.iterator(prev, dl.getSize()));
+		int splits = 5;
+		
+		int splitSize = data.getSize()/splits;
+		int prev = 0;
+		Runnable r;
+		
+		// Run on all but one split
+		for (int i = 0; i < splits-1; i++){
+			r = new EmStepRunnable(data.iterator(prev, prev+splitSize));
+			tasks.add(ex.submit(r));
+			prev += splitSize;
+		}
+		
+		if (!holdOut) {
+			r = new EmStepRunnable(data.iterator(prev, data.getSize()));
+			tasks.add(ex.submit(r));
+		}
+		
+		if (userData != null) {
+			r = new EmStepRunnable(userData.iterator(0, userData.getSize()));
 			tasks.add(ex.submit(r));
 		}
 		
@@ -102,6 +139,21 @@ public class PLSA implements Model{
 		
 		userClasses.finaliseRound();
 		caTdm.finaliseRound();
+		
+		double retval = 0;
+		int count = 0;
+		
+		if (holdOut) {
+			Iterator <Double> predIt = predict(data.iterator(prev, data.getSize())).iterator();
+			Iterator <Datum> dataIt = data.iterator(prev, data.getSize());
+			while (predIt.hasNext()) {
+				double diff = predIt.next() - dataIt.next().getRating();
+				retval += diff*diff;
+				count++;
+			}
+		}
+		
+		return retval/count;
 	}
 	
 	public double getItemRatingForClass(int item, int cl){
@@ -124,8 +176,12 @@ public class PLSA implements Model{
 				Datum d = it.next();
 				sum = 0;
 				for (int c = 0; c < classes; c++){
-					perClass[c] = caTdm.getProb(d.getItem(), c, d.getRating())*
-							userClasses.getProb(d.getUser(), c);
+					double a = caTdm.getProb(d.getItem(), c, d.getRating());
+					double b = userClasses.getProb(d.getUser(), c);
+					perClass[c] = a*b;
+					if (Double.isNaN(a) || Double.isNaN(b) || a*b == 0){
+						throw new ArithmeticException();
+					}
 					sum += perClass[c];
 				}
 				for (int c = 0; c < classes; c++){
