@@ -43,6 +43,7 @@ public class Starter {
 		
 		configParser(doc.getChildNodes().item(0));
 		
+		GlobalSettings.getExecutor().shutdown();
 	}
 	
 	private static void configParser(Node config) throws IOException {

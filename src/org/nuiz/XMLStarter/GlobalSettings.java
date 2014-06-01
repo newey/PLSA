@@ -12,10 +12,11 @@ import org.w3c.dom.Node;
  */
 public class GlobalSettings {
 	private static ThreadPoolExecutor ex = null;
+	private static int numThreads = 1;
 	
 	public static void parseGlobalSettings (Node globalSettings) {
 		Node numThreadsNode = globalSettings.getChildNodes().item(1);
-		int numThreads = Integer.parseInt(numThreadsNode.getTextContent());
+		numThreads = Integer.parseInt(numThreadsNode.getTextContent());
 		
 		ex = new ThreadPoolExecutor (numThreads, numThreads, 1, TimeUnit.DAYS,
 				new LinkedBlockingQueue<Runnable>());
@@ -23,5 +24,9 @@ public class GlobalSettings {
 	
 	public static ThreadPoolExecutor getExecutor(){
 		return ex;
+	}
+	
+	public static int getNumThreads() {
+		return numThreads;
 	}
 }
