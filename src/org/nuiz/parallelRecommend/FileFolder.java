@@ -6,6 +6,10 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
+/**
+ * @author Robert Newey
+ * @deprecated
+ */
 class FileFolder{
 	private Vector<List<Datum>> folds;
 	private int maxItem;

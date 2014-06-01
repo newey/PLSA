@@ -9,8 +9,9 @@ import java.util.Scanner;
 import java.util.Vector;
 
 import org.nuiz.parallelPLSA.PLSA;
+import org.nuiz.utils.OrderedPair;
 
-public class Examiner {
+class Examiner {
 
 	public static void main(String[] args) throws IOException {
 		double normFactor = 10;

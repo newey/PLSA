@@ -5,8 +5,22 @@ import java.io.PrintStream;
 import java.util.Vector;
 
 
+/**
+ * Runs cross validation over the dataset
+ * 
+ * @author Robert Newey
+ */
 public class CVRunner {
 
+	/**
+	 * Runs cross validation over dataList, given some model, randomSeed, number of folds,
+	 * and outputs to the given OutputStream
+	 * @param dataList The data to perform CV on
+	 * @param model The model to perform CV with
+	 * @param randomSeed The random seed to use
+	 * @param folds The number of folds to perform
+	 * @param out Where to write output
+	 */
 	public CVRunner(DataList dataList, Model model, int randomSeed, int folds,
 			OutputStream out) {
 		double RMS = 0;

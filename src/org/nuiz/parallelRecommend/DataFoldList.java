@@ -6,6 +6,10 @@ import java.util.Set;
 import java.util.Vector;
 
 
+/**
+ * @deprecated
+ * @author Robert Newey
+ */
 class DataFoldList implements DataList {
 	Vector <List<Datum>> data;
 	Set <Integer> users;

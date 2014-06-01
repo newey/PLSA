@@ -1,4 +1,4 @@
-package org.nuiz.parallelRecommend;
+package org.nuiz.utils;
 
 public class Pair <A, B> {
 	public A a;

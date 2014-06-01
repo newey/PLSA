@@ -10,23 +10,30 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.nuiz.guessUserMean.GuessZero;
 import org.nuiz.parallelPLSA.PLSA;
-import org.nuiz.parallelRecommend.BinaryFileDataList;
-import org.nuiz.parallelRecommend.CVRunner;
-import org.nuiz.parallelRecommend.DataList;
-import org.nuiz.parallelRecommend.FileDataList;
-import org.nuiz.parallelRecommend.HoldoutRunner;
-import org.nuiz.parallelRecommend.Model;
-import org.nuiz.parallelRecommend.NormaliseData;
-import org.nuiz.parallelRecommend.NormalisedDataList;
-import org.nuiz.parallelRecommend.UserExaminer;
+import org.nuiz.parallelRecommend.*;
+import org.nuiz.slopeOne.SlopeOne;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * Starter to read in an XML file formed in accordance to LocalRec.xsd. Then runs al the 
+ * tests specified there.
+ *
+ * @author Robert Newey
+ */
 public class Starter {
 
+	
+	/**
+	 * @param args First element must a path to the xml configuraiton file.
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
 		String fname = args[0];
 		
@@ -113,6 +120,10 @@ public class Starter {
 	private static Model modelParser(Node modelNode) {
 		if (modelNode.getNodeName().equals("plsa")) {
 			return plsaParser(modelNode);
+		} else if (modelNode.getNodeName().equals("slopeOne")) {
+			return new SlopeOne();
+		} else if (modelNode.getNodeName().equals("guessZero")) {
+			return new GuessZero();
 		} else {
 			throw new IllegalArgumentException();
 		}

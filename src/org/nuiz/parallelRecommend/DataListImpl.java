@@ -5,14 +5,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * A base implementation of a DataList
+ * @author Robert Newey
+ */
 class DataListImpl implements DataList  {
 	private List<Datum> data = null;
 	private Set<Integer> users = null;
 	private Set<Integer> items = null;
 	private int maxItem = -1;
 	
+	/**
+	 * Default constructor, This will not become a usable DataList until loadData is called
+	 */
 	public DataListImpl() {}
 	
+	/**
+	 * Copy constructor, this creates a new DataListImpl backed by the one passed in. Constant time, constant memory
+	 * @param dli The DataListImpl to copy
+	 */
 	public DataListImpl(DataListImpl dli){
 		data = dli.getData();
 		users = dli.users;
@@ -20,10 +31,21 @@ class DataListImpl implements DataList  {
 		maxItem = dli.maxItem;
 	}
 	
+	/**
+	 * Creates a DataListImpl backed by a List of Data
+	 * @param v List of Data to load
+	 */
 	public DataListImpl(List<Datum> v) {
 		loadData(v);
 	}
 	
+	/**
+	 * Creates a DataListImpl backed by the arguments passed in
+	 * @param v List of Data to use
+	 * @param users Set containing user ids in v. Equality is preferable, but supersets are allowed
+	 * @param items Set containing item ids in v. Equality is preferable, but supersets are allowed
+	 * @param maxItem The largest item id in v.
+	 */
 	public DataListImpl(List<Datum> v, Set<Integer> users, Set<Integer> items, int maxItem) {
 		data = v;
 		this.users = users;
@@ -31,6 +53,10 @@ class DataListImpl implements DataList  {
 		this.maxItem = maxItem;
 	}
 	
+	/**
+	 * Sets this DataListImpl to be backed by the provided list
+	 * @param v List of Data to back this DataListImpl
+	 */
 	public void loadData(List<Datum> v) {
 		users = new HashSet<Integer>();
 		items = new HashSet<Integer>();

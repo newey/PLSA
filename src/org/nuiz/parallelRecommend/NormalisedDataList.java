@@ -3,10 +3,20 @@ package org.nuiz.parallelRecommend;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * Implements a DataList which puts out normalised ratings, then the denormalise function
+ * allows us to reconstruct the original ratings.
+ * @author Robert Newey
+ */
 public class NormalisedDataList implements DataList {
 	private NormaliseData core;
 	private DataList data;
 	
+	/**
+	 * Constructs a NormalisedDataList backed by data, and normalises according to core
+	 * @param data
+	 * @param core
+	 */
 	public NormalisedDataList (DataList data, NormaliseData core) {
 		this.data = data;
 		this.core = core;

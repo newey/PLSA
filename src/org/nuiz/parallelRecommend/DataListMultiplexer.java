@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+/**
+ * A DataList backed by multiple DataLists. Useful for performing model validation.
+ * @author Robert Newey
+ */
 public class DataListMultiplexer implements DataList {
 	Vector <DataList> data;
 	Set <Integer> users;
@@ -12,6 +16,13 @@ public class DataListMultiplexer implements DataList {
 	int maxItem = -1;
 	int size = 0;
 	
+	/**
+	 * Creates a DataListMultiplexer from multiple DataLists
+	 * @param data The DataLists to back this DataListMultiplexer
+	 * @param users A superset of the users in data, but equality is preferred
+	 * @param items A superset of the items in data, but equality is preferred
+	 * @param maxItem A number at least as large as the largest item id in data.
+	 */
 	public DataListMultiplexer (Vector <DataList> data, Set<Integer> users, Set<Integer> items, int maxItem) {
 		this.data=data;
 		this.users = users;

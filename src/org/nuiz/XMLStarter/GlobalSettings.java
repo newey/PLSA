@@ -6,6 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.w3c.dom.Node;
 
+/**
+ * Static class to hold settings global to all experiment runs.
+ * @author Robert Newey
+ */
 public class GlobalSettings {
 	private static ThreadPoolExecutor ex = null;
 	

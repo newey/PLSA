@@ -11,8 +11,30 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Vector;
 
+import org.nuiz.utils.OrderedPair;
+
+/**
+ * Gets predictions for a given user after training.
+ * @author Robert Newey
+ */
 public class UserExaminer {
 
+	/**
+	 * Writes predictions to an OutputStream in lines of the form:
+	 * <ul>
+	 * <li>User number</li>
+	 * <li>Number of ratings the movie has</li>
+	 * <li>Predicted (denormalised) user rating</li>
+	 * <li>Movie title</li>
+	 * </ul>
+	 * @param dataList DataList to train on
+	 * @param model Model to use
+	 * @param user User id to predict for
+	 * @param moviesFile Path to file with movie titles in it.
+	 * @param separator Separator to use in the moviesFile
+	 * @param outputFile Where to write output.
+	 * @throws IOException
+	 */
 	public UserExaminer (DataList dataList, Model model, int user, String moviesFile, String separator, OutputStream outputFile) throws IOException {
 		model.fit(dataList);
 		PrintStream outPrint = new PrintStream(outputFile);

@@ -7,6 +7,11 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
 
+/**
+ * Gets the user data from a given file. This is tailored for the movieLens 1m dataset's user data.
+ * See their readme for how it's stuctured.
+ * @author Robert Newey
+ */
 public class UserFileDataList extends DataListImpl {
 
 	public static final int GENDER_ITEM = 1000000;

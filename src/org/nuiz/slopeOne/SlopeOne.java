@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.nuiz.parallelRecommend.*;
+import org.nuiz.utils.Pair;
 
 
 public class SlopeOne implements Model {
