@@ -3,13 +3,11 @@ package org.nuiz.parallelPLSA;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Vector;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
+import org.nuiz.XMLStarter.GlobalSettings;
 import org.nuiz.parallelRecommend.Model;
 import org.nuiz.parallelRecommend.Datum;
 import org.nuiz.parallelRecommend.DataList;
@@ -48,9 +46,8 @@ public class PLSA implements Model{
 		for (Integer i : data.getItems()){
 			caTdm.addDisribution(i, distFactory);
 		}
-		
-		BlockingQueue<Runnable> work = new LinkedBlockingQueue<Runnable>();
-		ThreadPoolExecutor ex = new ThreadPoolExecutor(4, 4, 60, TimeUnit.SECONDS, work);
+
+		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
 		
 		double minSoFar = Double.POSITIVE_INFINITY;
 		double current;

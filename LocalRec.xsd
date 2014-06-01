@@ -71,6 +71,8 @@
 			</xs:choice>
 			<xs:choice>
 				<xs:element name="plsa" type="PLSA"/>
+				<xs:element name="slopeOne" type="SlopeOne"/>
+				<xs:element name="guessZero" type="GuessZero"/>
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
@@ -121,6 +123,8 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="SlopeOne"/>
+	<xs:complexType name="GuessZero"/>
 	<!-- End Models description -->
 		
 </xs:schema>
