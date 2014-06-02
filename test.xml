@@ -6,27 +6,30 @@
 	<globalSettings>
 		<numThreads>4</numThreads>
 	</globalSettings>
-	<!--<holdOut>
-		<outputFile>outfile.txt</outputFile>
-		<binaryFileDatalist>
-			<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
-		</binaryFileDatalist>
-		<plsa>
-			<steps>3</steps>
-			<classes>3</classes>
-			<holdOutCases>10000</holdOutCases>
-		</plsa>
+	<holdOut>
+		<outputFile>-</outputFile>
+		<normaliseDataList>
+			<normalisationFactor>0</normalisationFactor>
+			<binaryFileDatalist>
+				<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
+			</binaryFileDatalist>
+		</normaliseDataList>
+		<itemBased>
+			<adjustedCosineSimilarity/>
+		</itemBased>
 		<randomSeed>1</randomSeed>
 		<testSize>10000</testSize>
 	</holdOut>
-
+	
+<!--
 	<crossVal>
 		<outputFile>outfile.txt</outputFile>
 		<normaliseDataList>
 			<normalisationFactor>5</normalisationFactor>
-			<binaryFileDatalist>
-				<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
-			</binaryFileDatalist>
+			<fileDatalist>
+				<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data</inputFile>
+				<separator>\t</separator>
+			</fileDatalist>
 		</normaliseDataList>
 		<plsa>
 			<steps>5</steps>
@@ -35,7 +38,7 @@
 		</plsa>
 		<randomSeed>1</randomSeed>
 		<folds>5</folds>
-	</crossVal> -->
+	</crossVal> 
 	<examineUser>
 		<outputFile>/Users/robert/user1rec.txt</outputFile>
 		<normaliseDataList>
@@ -52,5 +55,5 @@
 		<userNumber>1</userNumber>
 		<movieFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1M/movies.dat</movieFile>
 		<separator>::</separator>
-	</examineUser>
+	</examineUser>-->
 </config>

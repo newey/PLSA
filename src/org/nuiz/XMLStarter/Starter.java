@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.nuiz.guessUserMean.GuessZero;
+import org.nuiz.itemBasedCF.ItemBasedCF;
 import org.nuiz.parallelPLSA.PLSA;
 import org.nuiz.parallelRecommend.*;
 import org.nuiz.slopeOne.SlopeOne;
@@ -125,6 +126,8 @@ public class Starter {
 			return new SlopeOne();
 		} else if (modelNode.getNodeName().equals("guessZero")) {
 			return new GuessZero();
+		} else if (modelNode.getNodeName().equals("itemBased")) {
+			return itemBasedParser(modelNode);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -162,5 +165,22 @@ public class Starter {
 		System.out.printf("PLSA: %d %d %d\n", steps, classes, holdoutCases);
 		
 		return new PLSA(steps, classes);
+	}
+	
+	private static Model itemBasedParser(Node node){
+		NodeList nl = node.getChildNodes();
+		String simType = nl.item(1).getNodeName();
+		ItemBasedCF.SimType st;
+		if (simType.equals("cosineSimilarity")) {
+			st = ItemBasedCF.SimType.COSINE_SIM;
+		} else if (simType.equals("adjustedCosineSimilarity")) {
+			st = ItemBasedCF.SimType.ADJUSTED_COSINE_SIM;
+		} else if (simType.equals("correlationSimilarity")) {
+			st = ItemBasedCF.SimType.CORRELATION_SIM;
+		} else {
+			throw new IllegalArgumentException();
+		}
+		
+		return new ItemBasedCF(st);
 	}
 }

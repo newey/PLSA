@@ -73,6 +73,7 @@
 				<xs:element name="plsa" type="PLSA"/>
 				<xs:element name="slopeOne" type="SlopeOne"/>
 				<xs:element name="guessZero" type="GuessZero"/>
+				<xs:element name="itemBased" type="ItemBased"/>
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
@@ -125,6 +126,19 @@
 	</xs:complexType>
 	<xs:complexType name="SlopeOne"/>
 	<xs:complexType name="GuessZero"/>
+	<xs:complexType name="ItemBased">
+		<xs:complexContent>
+			<xs:extension base="Model">
+				<xs:sequence>
+					<xs:choice>
+						<xs:element name="cosineSimilarity"/>
+						<xs:element name="adjustedCosineSimilarity"/>
+						<xs:element name="correlationSimilarity"/>
+					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<!-- End Models description -->
 		
 </xs:schema>
