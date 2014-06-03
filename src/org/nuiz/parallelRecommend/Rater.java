@@ -1,6 +1,7 @@
 package org.nuiz.parallelRecommend;
 
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 
 /**
  * An object to get statistics on how well a model performs predictions.
@@ -17,8 +18,10 @@ class Rater {
 	 * @param train
 	 * @param test
 	 * @param model
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	public Rater (DataList train, DataList test, Model model){
+	public Rater (DataList train, DataList test, Model model) throws InterruptedException, ExecutionException{
 		model.fit(train);
 		Iterable <Double> preds = model.predict(test);
 		Iterator <Double> predIt = preds.iterator();

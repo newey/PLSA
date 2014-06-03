@@ -2,11 +2,18 @@ package org.nuiz.itemBasedCF;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.Vector;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
+import org.nuiz.XMLStarter.GlobalSettings;
 import org.nuiz.parallelRecommend.DataList;
 import org.nuiz.parallelRecommend.Datum;
 import org.nuiz.parallelRecommend.Model;
@@ -70,12 +77,46 @@ public class ItemBasedCF implements Model {
 	}
 
 	@Override
-	public Iterable<Double> predict(DataList data) {
+	public Iterable<Double> predict(DataList data) throws InterruptedException, ExecutionException {
+		List <Future<Vector<Double>>> results = null;
 		Vector <Double> retval = new Vector<Double>();
-		for (Datum d : data) {
-			retval.add(weightedPredict(d));
+		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
+		int splits = GlobalSettings.getNumThreads()*2;
+		int splitSize = data.getSize()/splits;
+		int prev = 0;
+		Vector<Callable<Vector<Double>>> tasks = new Vector<Callable<Vector<Double>>>();
+		
+		// Run on all but one split
+		for (int i = 0; i < splits-1; i++){
+			tasks.add(new WeightedCallable(data.iterator(prev, prev+splitSize)));
+			prev+=splitSize;
+		}
+		
+		tasks.add(new WeightedCallable(data.iterator(prev, data.getSize())));
+		results = ex.invokeAll(tasks);
+		
+		for (Future<Vector<Double>> f : results) {
+			retval.addAll(f.get());
 		}
 		return retval;
+	}
+	
+	private class WeightedCallable implements Callable<Vector<Double>> {
+		Iterator<Datum> dataIt;
+		
+		public WeightedCallable (Iterator<Datum> datIt) {
+			dataIt = datIt;
+		}
+
+		@Override
+		public Vector<Double> call() throws Exception {
+			Vector <Double> retval = new Vector<Double>();
+			while (dataIt.hasNext()) {
+				retval.add(weightedPredict(dataIt.next()));
+			}
+			return retval;
+		}
+		
 	}
 	
 	private double weightedPredict(Datum d) {

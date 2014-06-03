@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import org.nuiz.utils.OrderedPair;
 
@@ -34,8 +35,10 @@ public class UserExaminer {
 	 * @param separator Separator to use in the moviesFile
 	 * @param outputFile Where to write output.
 	 * @throws IOException
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	public UserExaminer (DataList dataList, Model model, int user, String moviesFile, String separator, OutputStream outputFile) throws IOException {
+	public UserExaminer (DataList dataList, Model model, int user, String moviesFile, String separator, OutputStream outputFile) throws IOException, InterruptedException, ExecutionException {
 		model.fit(dataList);
 		PrintStream outPrint = new PrintStream(outputFile);
 		HashMap<Integer, String> movieTitles = new HashMap<Integer, String>();

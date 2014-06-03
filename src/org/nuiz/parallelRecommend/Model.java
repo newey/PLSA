@@ -1,5 +1,7 @@
 package org.nuiz.parallelRecommend;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * The interface defining models in this system.
  * @author Robert Newey
@@ -15,6 +17,8 @@ public interface Model {
 	 * Perform prediction based on the model fit. It is only valid to call this after fit has been called
 	 * @param data Data to perform prediction on
 	 * @return An Iterable over the predictions in the same order as were given in data.
+	 * @throws InterruptedException 
+	 * @throws ExecutionException 
 	 */
-	public Iterable<Double> predict(DataList data);
+	public Iterable<Double> predict(DataList data) throws InterruptedException, ExecutionException;
 }

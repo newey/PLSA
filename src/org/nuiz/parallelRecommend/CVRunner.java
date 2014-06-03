@@ -3,6 +3,7 @@ package org.nuiz.parallelRecommend;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -20,9 +21,11 @@ public class CVRunner {
 	 * @param randomSeed The random seed to use
 	 * @param folds The number of folds to perform
 	 * @param out Where to write output
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
 	public CVRunner(DataList dataList, Model model, int randomSeed, int folds,
-			OutputStream out) {
+			OutputStream out) throws InterruptedException, ExecutionException {
 		double RMS = 0;
 		double RMS2 = 0;
 		double ABS = 0;

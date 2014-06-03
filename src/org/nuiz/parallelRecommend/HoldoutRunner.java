@@ -3,6 +3,7 @@ package org.nuiz.parallelRecommend;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Gets the ABS and RMSE over a holdout set for a model.
@@ -20,9 +21,11 @@ public class HoldoutRunner {
 	 * @param testSize Size of the test set
 	 * @param outputFile Where to write the output to
 	 * @throws IOException
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
 	public HoldoutRunner(DataList data, Model model, int seed, int testSize,
-			OutputStream outputFile) throws IOException {		
+			OutputStream outputFile) throws IOException, InterruptedException, ExecutionException {		
 		PrintStream outPrint = new PrintStream(outputFile);
 		
 		DataList testData = data.getSubDataList(0, testSize);
