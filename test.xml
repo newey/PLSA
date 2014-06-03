@@ -14,9 +14,9 @@
 				<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
 			</binaryFileDatalist>
 		</normaliseDataList>
-		<itemBased>
+		<userBased>
 			<adjustedCosineSimilarity/>
-		</itemBased>
+		</userBased>
 		<randomSeed>1</randomSeed>
 		<testSize>10000</testSize>
 	</holdOut>

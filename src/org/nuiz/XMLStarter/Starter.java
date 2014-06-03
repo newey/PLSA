@@ -15,6 +15,7 @@ import org.nuiz.itemBasedCF.ItemBasedCF;
 import org.nuiz.parallelPLSA.PLSA;
 import org.nuiz.parallelRecommend.*;
 import org.nuiz.slopeOne.SlopeOne;
+import org.nuiz.userBasedCF.UserBasedCF;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -128,6 +129,8 @@ public class Starter {
 			return new GuessZero();
 		} else if (modelNode.getNodeName().equals("itemBased")) {
 			return itemBasedParser(modelNode);
+		} else if (modelNode.getNodeName().equals("userBased")) {
+			return userBasedParser(modelNode);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -182,5 +185,22 @@ public class Starter {
 		}
 		
 		return new ItemBasedCF(st);
+	}
+	
+	private static Model userBasedParser(Node node){
+		NodeList nl = node.getChildNodes();
+		String simType = nl.item(1).getNodeName();
+		UserBasedCF.SimType st;
+		if (simType.equals("cosineSimilarity")) {
+			st = UserBasedCF.SimType.COSINE_SIM;
+		} else if (simType.equals("adjustedCosineSimilarity")) {
+			st = UserBasedCF.SimType.ADJUSTED_COSINE_SIM;
+		} else if (simType.equals("correlationSimilarity")) {
+			st = UserBasedCF.SimType.CORRELATION_SIM;
+		} else {
+			throw new IllegalArgumentException();
+		}
+		
+		return new UserBasedCF(st);
 	}
 }

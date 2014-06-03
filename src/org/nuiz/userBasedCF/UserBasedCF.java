@@ -1,4 +1,4 @@
-package org.nuiz.itemBasedCF;
+package org.nuiz.userBasedCF;
 
 
 import java.util.HashMap;
@@ -21,51 +21,51 @@ import org.nuiz.utils.OrderedPair;
  * @author Robert Newey
  *
  */
-public class ItemBasedCF implements Model {
+public class UserBasedCF implements Model {
 	public enum SimType{
 		COSINE_SIM,
 		ADJUSTED_COSINE_SIM,
 		CORRELATION_SIM
 	}
 	
-	private Map<Integer, Double> userAvg;
-	private HashMap <Integer, Map<Integer, Double>> itemSets;
-	private HashMap <Integer, Map<Integer, Double>> userRatings;
+	private Map<Integer, Double> itemAvg;
+	private HashMap <Integer, Map<Integer, Double>> userSets;
+	private HashMap <Integer, Map<Integer, Double>> itemRatings;
 	private SimilarityEngine simEngine;
 	
-	public ItemBasedCF(SimType st){
-		userAvg = new HashMap<Integer, Double>();
-		itemSets = new HashMap<Integer, Map<Integer,Double>>();
-		userRatings = new HashMap<Integer, Map<Integer,Double>>();
+	public UserBasedCF(SimType st){
+		itemAvg = new HashMap<Integer, Double>();
+		userSets = new HashMap<Integer, Map<Integer,Double>>();
+		itemRatings = new HashMap<Integer, Map<Integer,Double>>();
 		if (st == SimType.COSINE_SIM){
-			simEngine = new CosineSimilarity(itemSets);
+			simEngine = new CosineSimilarity(userSets);
 		} else if (st == SimType.ADJUSTED_COSINE_SIM) {
-			simEngine = new AdjustedCosineSimilarity(itemSets, userAvg);
+			simEngine = new AdjustedCosineSimilarity(userSets, itemAvg);
 		} else if (st == SimType.CORRELATION_SIM) {
-			simEngine = new CorrelationSimilarity(itemSets);
+			simEngine = new CorrelationSimilarity(userSets);
 		}
 	}
 	
 	@Override
 	public void fit(DataList data) {
-		for (Integer item : data.getItems()){
-			itemSets.put(item, new TreeMap<Integer, Double>());
+		for (Integer user : data.getUsers()){
+			userSets.put(user, new TreeMap<Integer, Double>());
 		}
 		
-		for (int user : data.getUsers()) {
-			userRatings.put(user, new HashMap<Integer, Double>());
-			userAvg.put(user, 1e-10);
+		for (int item : data.getItems()) {
+			itemRatings.put(item, new HashMap<Integer, Double>());
+			itemAvg.put(item, 1e-10);
 		}
 		
 		for (Datum d : data) {
 			double rating = d.getRating();
-			itemSets.get(d.getItem()).put(d.getUser(), rating);
-			userAvg.put(d.getUser(), userAvg.get(d.getUser()) + rating);
-			userRatings.get(d.getUser()).put(d.getItem(), rating);
+			userSets.get(d.getUser()).put(d.getItem(), rating);
+			itemAvg.put(d.getItem(), itemAvg.get(d.getItem()) + rating);
+			itemRatings.get(d.getItem()).put(d.getUser(), rating);
 		}
 		
-		for (int user : data.getUsers()) {
-			userAvg.put(user, userAvg.get(user)/userRatings.get(user).size());
+		for (int item : data.getItems()) {
+			itemAvg.put(item, itemAvg.get(item)/itemRatings.get(item).size());
 		}
 	}
 
@@ -82,10 +82,10 @@ public class ItemBasedCF implements Model {
 		PriorityQueue<OrderedPair<Double, Integer>> sims = 
 				new PriorityQueue<OrderedPair<Double, Integer>>();
 		
-		Map<Integer, Double> rated = userRatings.get(d.getUser());
+		Map<Integer, Double> rated = itemRatings.get(d.getItem());
 		
 		for (int i : rated.keySet()) {
-			sims.add(new OrderedPair<Double, Integer>(simEngine.similarity(i, d.getItem()), i));
+			sims.add(new OrderedPair<Double, Integer>(simEngine.similarity(i, d.getUser()), i));
 		}
 		
 		int toFind = 5;

@@ -74,6 +74,7 @@
 				<xs:element name="slopeOne" type="SlopeOne"/>
 				<xs:element name="guessZero" type="GuessZero"/>
 				<xs:element name="itemBased" type="ItemBased"/>
+				<xs:element name="userBased" type="UserBased"/>
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
@@ -127,6 +128,19 @@
 	<xs:complexType name="SlopeOne"/>
 	<xs:complexType name="GuessZero"/>
 	<xs:complexType name="ItemBased">
+		<xs:complexContent>
+			<xs:extension base="Model">
+				<xs:sequence>
+					<xs:choice>
+						<xs:element name="cosineSimilarity"/>
+						<xs:element name="adjustedCosineSimilarity"/>
+						<xs:element name="correlationSimilarity"/>
+					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="UserBased">
 		<xs:complexContent>
 			<xs:extension base="Model">
 				<xs:sequence>
