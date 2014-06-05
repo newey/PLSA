@@ -36,10 +36,12 @@ public class AdjustedCosineSimilarity extends SimilarityEngine {
 		Set<Integer> smaller = (ratingsA.size() < ratingsB.size() ? ratingsA : ratingsB).keySet();
 		Set<Integer> larger = (ratingsA.size() >= ratingsB.size() ? ratingsA : ratingsB).keySet();
 		double dotProduct = 0;
+		double support = 0;
 		for (Integer orthogId : smaller) {
 			if (larger.contains(orthogId)){
 				dotProduct += (ratingsA.get(orthogId)-orthogAverages.get(orthogId))*
 						(ratingsB.get(orthogId)-orthogAverages.get(orthogId));
+				support += 1;
 			}	
 		}
 		return dotProduct/(aLen*bLen);

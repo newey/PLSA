@@ -1,11 +1,11 @@
 package org.nuiz.similarityEngines;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CorrelationSimilarity extends SimilarityEngine {
-	Map <Integer, Double> primaryAvg = new HashMap<Integer,Double>();
+	Map <Integer, Double> primaryAvg = new ConcurrentHashMap<Integer,Double>();
 	
 	
 	public CorrelationSimilarity(

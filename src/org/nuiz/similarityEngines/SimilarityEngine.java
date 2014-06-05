@@ -2,12 +2,13 @@ package org.nuiz.similarityEngines;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class SimilarityEngine {
 	private final Map<Integer, Map<Integer, Double>> similarities =
-			new HashMap<Integer, Map<Integer, Double>>();
+			new ConcurrentHashMap<Integer, Map<Integer, Double>>();
 	private final Map<Integer, Map<Integer, Double>> ratingSets;
-	private Map<Integer, Double> lengths = new HashMap<Integer, Double>();
+	private Map<Integer, Double> lengths = new ConcurrentHashMap<Integer, Double>();
 	
 	
 	protected SimilarityEngine (Map<Integer, Map<Integer, Double>> ratingSets){

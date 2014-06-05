@@ -75,6 +75,8 @@
 				<xs:element name="guessZero" type="GuessZero"/>
 				<xs:element name="itemBased" type="ItemBased"/>
 				<xs:element name="userBased" type="UserBased"/>
+				<xs:element name="svd" type="SVD"/>
+				<xs:element name="svdpp" type="SVDPP"/>
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
@@ -149,6 +151,27 @@
 						<xs:element name="adjustedCosineSimilarity"/>
 						<xs:element name="correlationSimilarity"/>
 					</xs:choice>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SVD">
+		<xs:complexContent>
+			<xs:extension base="Model">
+				<xs:sequence>
+					<xs:element name="steps" type="xs:integer"/>
+					<xs:element name="classes" type="xs:integer"/>
+					<xs:element name="lambda" type="xs:float"/>
+					<xs:element name="gamma" type="xs:float"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="SVDPP">
+		<xs:complexContent>
+			<xs:extension base="Model">
+				<xs:sequence>
+					<xs:element name="lambda1" type="xs:float"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>

@@ -8,15 +8,13 @@
 	</globalSettings>
 	<holdOut>
 		<outputFile>-</outputFile>
-		<normaliseDataList>
-			<normalisationFactor>0</normalisationFactor>
-			<binaryFileDatalist>
-				<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-1m/ratingsBin.dat</inputFile>
-			</binaryFileDatalist>
-		</normaliseDataList>
-		<userBased>
-			<adjustedCosineSimilarity/>
-		</userBased>
+		<fileDatalist>
+			<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data</inputFile>
+			<separator>\t</separator>
+		</fileDatalist>
+		<svdpp>
+			<lambda1>3</lambda1>
+		</svdpp>
 		<randomSeed>1</randomSeed>
 		<testSize>10000</testSize>
 	</holdOut>

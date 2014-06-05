@@ -16,6 +16,8 @@ import org.nuiz.itemBasedCF.ItemBasedCF;
 import org.nuiz.parallelPLSA.PLSA;
 import org.nuiz.parallelRecommend.*;
 import org.nuiz.slopeOne.SlopeOne;
+import org.nuiz.svd.SVDModel;
+import org.nuiz.svdpp.SvdPPModel;
 import org.nuiz.userBasedCF.UserBasedCF;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -134,6 +136,10 @@ public class Starter {
 			return itemBasedParser(modelNode);
 		} else if (modelNode.getNodeName().equals("userBased")) {
 			return userBasedParser(modelNode);
+		} else if (modelNode.getNodeName().equals("svd")) {
+			return svdParser(modelNode);
+		} else if (modelNode.getNodeName().equals("svdpp")) {
+			return svdppParser(modelNode);
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -205,5 +211,22 @@ public class Starter {
 		}
 		
 		return new UserBasedCF(st);
+	}
+	
+	private static Model svdParser(Node node){
+		NodeList nl = node.getChildNodes();
+		int steps = Integer.parseInt(node.getChildNodes().item(1).getTextContent());
+		int classes = Integer.parseInt(node.getChildNodes().item(3).getTextContent());
+		Double lambda = Double.parseDouble((nl.item(5).getTextContent()));
+		Double gamma = Double.parseDouble((nl.item(7).getTextContent()));
+		
+		return new SVDModel(steps, classes, lambda, gamma);
+	}
+	
+	private static Model svdppParser(Node node){
+		NodeList nl = node.getChildNodes();
+		Double lambda1 = Double.parseDouble((nl.item(1).getTextContent()));
+		
+		return new SvdPPModel(lambda1);
 	}
 }

@@ -129,7 +129,7 @@ public class UserBasedCF implements Model {
 			sims.add(new OrderedPair<Double, Integer>(simEngine.similarity(i, d.getUser()), i));
 		}
 		
-		int toFind = 5;
+		int toFind = 20;
 		double pred = 0;
 		double div = 1e-10;
 		for (OrderedPair<Double, Integer> op : sims) {
