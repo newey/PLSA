@@ -19,8 +19,9 @@ public interface Model {
 	 * @return An Iterable over the predictions in the same order as were given in data.
 	 * @throws InterruptedException 
 	 * @throws ExecutionException 
+	 * @throws Exception 
 	 */
-	public Iterable<Double> predict(DataList data) throws InterruptedException, ExecutionException;
+	public Iterable<Double> predict(DataList data) throws InterruptedException, ExecutionException, Exception;
 	
 	public String getDescription();
 }

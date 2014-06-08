@@ -80,7 +80,7 @@ public class ItemBasedCF implements Model {
 	}
 
 	@Override
-	public Iterable<Double> predict(DataList data) throws InterruptedException, ExecutionException {
+	public Iterable<Double> predict(DataList data) throws Exception {
 		List <Future<Vector<Double>>> results = null;
 		Vector <Double> retval = new Vector<Double>();
 		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
@@ -90,7 +90,7 @@ public class ItemBasedCF implements Model {
 		Vector<Callable<Vector<Double>>> tasks = new Vector<Callable<Vector<Double>>>();
 		
 		// Run on all but one split
-		for (int i = 0; i < splits-1; i++){
+		/*for (int i = 0; i < splits-1; i++){
 			tasks.add(new WeightedCallable(data.iterator(prev, prev+splitSize)));
 			prev+=splitSize;
 		}
@@ -101,7 +101,8 @@ public class ItemBasedCF implements Model {
 		for (Future<Vector<Double>> f : results) {
 			retval.addAll(f.get());
 		}
-		return retval;
+		return retval;*/
+		return (new WeightedCallable(data.iterator())).call();
 	}
 	
 	private class WeightedCallable implements Callable<Vector<Double>> {

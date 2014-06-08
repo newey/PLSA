@@ -21,11 +21,10 @@ public class MultiCVRunner {
 	 * @param randomSeed The random seed to use
 	 * @param folds The number of folds to perform
 	 * @param out Where to write output
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
 	public MultiCVRunner(DataList dataList, Model model, int randomSeed, int folds,
-			OutputStream out) throws InterruptedException, ExecutionException {
+			OutputStream out) throws Exception {
 		double RMS = 0;
 		double RMS2 = 0;
 		double ABS = 0;
