@@ -98,6 +98,11 @@ public class SlopeOne implements Model {
 			}
 		}
 	}
+
 	
+	@Override
+	public String getDescription() {
+		return String.format("slopeOne");
+	}
 	
 }

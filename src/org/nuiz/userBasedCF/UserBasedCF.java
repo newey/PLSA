@@ -39,8 +39,9 @@ public class UserBasedCF implements Model {
 	private HashMap <Integer, Map<Integer, Double>> userSets;
 	private HashMap <Integer, Map<Integer, Double>> itemRatings;
 	private SimilarityEngine simEngine;
+	private final int hoodSize;
 	
-	public UserBasedCF(SimType st){
+	public UserBasedCF(SimType st, int hoodSize){
 		itemAvg = new HashMap<Integer, Double>();
 		userSets = new HashMap<Integer, Map<Integer,Double>>();
 		itemRatings = new HashMap<Integer, Map<Integer,Double>>();
@@ -51,6 +52,7 @@ public class UserBasedCF implements Model {
 		} else if (st == SimType.CORRELATION_SIM) {
 			simEngine = new CorrelationSimilarity(userSets);
 		}
+		this.hoodSize = hoodSize;
 	}
 	
 	@Override
@@ -146,5 +148,10 @@ public class UserBasedCF implements Model {
 			throw new ArithmeticException();
 		}
 		return pred/div;
+	}
+	
+	@Override
+	public String getDescription() {
+		return String.format("userBasedCF,%s,%d",simEngine,hoodSize);
 	}
 }

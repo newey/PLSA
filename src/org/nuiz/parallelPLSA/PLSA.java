@@ -64,17 +64,15 @@ public class PLSA implements Model{
 			count++;
 		}
 		
-		System.out.printf("Initial error: %f\n", retval/count);
+		//System.out.printf("Initial error: %f\n", retval/count);
 		
 		for (int i = 0; i < steps; i++) {
 			current = emStep(data, ex, true);
-			System.out.printf("Step %d: %f\n",i,  current);
+			//System.out.printf("Step %d: %f\n",i,  current);
 			minSoFar = current < minSoFar ? current : minSoFar;
 		}
 		
 		emStep(data, ex, false);
-		
-		ex.shutdown();
 	}
 
 	@Override
@@ -190,5 +188,10 @@ public class PLSA implements Model{
 			}
 			//System.err.println("Ran an EmStep");
 		}	
+	}
+	
+	@Override
+	public String getDescription() {
+		return String.format("PLSA,%d,%d,%b", steps, classes, userData==null);
 	}
 }

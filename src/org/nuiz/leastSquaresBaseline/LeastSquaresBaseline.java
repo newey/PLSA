@@ -1,29 +1,26 @@
-package org.nuiz.svdpp;
+package org.nuiz.leastSquaresBaseline;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 
-
 import org.nuiz.parallelRecommend.DataList;
 import org.nuiz.parallelRecommend.Datum;
 import org.nuiz.parallelRecommend.Model;
 import org.nuiz.utils.SortedSetIntersection;
-
 import org.jblas.*;
 
 
-public class SvdPPModel implements Model {
+public class LeastSquaresBaseline implements Model {
 	private final double lambda1;
 	private double overallBase;
 	private Map<Integer, Double> userBase = new HashMap<Integer, Double>();
 	private Map<Integer, Double> itemBase = new HashMap<Integer, Double>();
 	
-	public SvdPPModel(double l1) {
+	public LeastSquaresBaseline(double l1) {
 		lambda1 = l1;
 	}
 	
@@ -31,12 +28,7 @@ public class SvdPPModel implements Model {
 	@Override
 	public void fit(DataList data) {
 		// fit the baseline model
-		System.out.printf("inside fit\n");
-		
 		fitBaseline(data);
-		
-		
-		// TODO Auto-generated method stub
 
 	}
 
@@ -65,7 +57,6 @@ public class SvdPPModel implements Model {
 		// Isn't going to store for 0, since that is all.
 		Map <Integer, SortedSet<Integer>> paramLists = new HashMap<Integer, SortedSet<Integer>>();
 
-		System.out.printf("inside fitBaseline\n");
 		int paramCounter = 1;
 		for (int user : data.getUsers()) {
 			userToParamIndex.put(user, paramCounter);
@@ -99,8 +90,6 @@ public class SvdPPModel implements Model {
 			results.put(rowCounter, 0, d.getRating());
 			rowCounter++;
 		}
-
-		System.out.printf("constructed design matrix (%d x %d)\n", numRows, numCols);
 		
 		
 		DoubleMatrix hat = new DoubleMatrix(numCols, numCols);
@@ -126,21 +115,12 @@ public class SvdPPModel implements Model {
 			}
 		}
 		
-		System.out.printf("pre-decompose\n");
-		
 		DoubleMatrix[] eigenDecomp = Eigen.symmetricEigenvectors(hat);
-		
-		System.out.printf("post-decompose\n");
 		
 		for (int i = 0; i < numCols; i++) {
 			eigenDecomp[1].put(i, i, 1/eigenDecomp[1].get(i,i));
 		}
-		
-		System.out.printf("pre-inverse\n");
 		hat = eigenDecomp[0].mmul(eigenDecomp[1]).mmul(eigenDecomp[0].transpose());
-		
-		System.out.printf("mid-inverse\n");
-		//DoubleMatrix foo = design.transpose().mmul(results);
 		DoubleMatrix foo = new DoubleMatrix(numCols, 1);
 		
 		for (int i = 1; i < numCols; i++) {
@@ -157,11 +137,7 @@ public class SvdPPModel implements Model {
 		}
 		foo.put(0,0, toSet);
 		
-		System.out.printf("post-inverse\n");
-		
 		DoubleMatrix coefs = hat.mmul(foo);
-		
-		System.out.printf("got coefs\n");
 		
 		overallBase = coefs.get(0);
 		
@@ -172,9 +148,12 @@ public class SvdPPModel implements Model {
 		for (int item : itemToParamIndex.keySet()){
 			itemBase.put(item, coefs.get(itemToParamIndex.get(item), 0));
 		}
-
-		System.out.printf("put coefs in object\n");
 		
+	}
+	
+	@Override
+	public String getDescription() {
+		return String.format("leastSquaresBaseline,%f", lambda1);
 	}
 
 }

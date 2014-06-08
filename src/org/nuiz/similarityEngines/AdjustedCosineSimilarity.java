@@ -48,4 +48,11 @@ public class AdjustedCosineSimilarity extends SimilarityEngine {
 
 	}
 
+
+	
+	@Override
+	public String toString(){
+		return "AdjustedCosineSimilarity";
+	}
+	
 }

@@ -21,4 +21,9 @@ public class GuessZero implements Model {
 		return preds;
 	}
 
+	@Override
+	public String getDescription() {
+		return String.format("guessZero");
+	}
+
 }

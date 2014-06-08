@@ -97,4 +97,11 @@ public class SVDModel implements Model {
 		return ratings;
 	}
 
+	@Override
+	public String getDescription() {
+		return String.format("SVD,%d,%d,%f,%f",steps,classes,lambda,gamma);
+	}
+	
+	
+
 }

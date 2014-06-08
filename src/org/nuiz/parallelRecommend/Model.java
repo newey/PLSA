@@ -21,4 +21,6 @@ public interface Model {
 	 * @throws ExecutionException 
 	 */
 	public Iterable<Double> predict(DataList data) throws InterruptedException, ExecutionException;
+	
+	public String getDescription();
 }

@@ -37,8 +37,12 @@ public class CosineSimilarity extends SimilarityEngine {
 				support += 1;
 			}
 		}
-		return (support/(support+15))*dotProduct/(aLen*bLen);
-
+		return dotProduct/(aLen*bLen);
+	}
+	
+	@Override
+	public String toString(){
+		return "CosineSimilarity";
 	}
 
 }

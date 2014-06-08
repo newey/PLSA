@@ -6,18 +6,21 @@
 	<globalSettings>
 		<numThreads>4</numThreads>
 	</globalSettings>
-	<holdOut>
+	<multiCV>
 		<outputFile>-</outputFile>
 		<fileDatalist>
 			<inputFile>/Users/robert/Documents/ScalaWorkspace/LocalRec/ml-100k/u.data</inputFile>
 			<separator>\t</separator>
 		</fileDatalist>
-		<svdpp>
-			<lambda1>3</lambda1>
-		</svdpp>
 		<randomSeed>1</randomSeed>
-		<testSize>10000</testSize>
-	</holdOut>
+		<folds>5</folds>
+		<guessZero/>
+		<plsa>
+			<steps>2</steps>
+			<classes>3</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+	</multiCV>
 	
 <!--
 	<crossVal>

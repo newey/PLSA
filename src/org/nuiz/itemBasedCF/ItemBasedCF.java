@@ -39,8 +39,9 @@ public class ItemBasedCF implements Model {
 	private HashMap <Integer, Map<Integer, Double>> itemSets;
 	private HashMap <Integer, Map<Integer, Double>> userRatings;
 	private SimilarityEngine simEngine;
+	private final int hoodSize;
 	
-	public ItemBasedCF(SimType st){
+	public ItemBasedCF(SimType st, int hoodSize){
 		userAvg = new HashMap<Integer, Double>();
 		itemSets = new HashMap<Integer, Map<Integer,Double>>();
 		userRatings = new HashMap<Integer, Map<Integer,Double>>();
@@ -51,6 +52,7 @@ public class ItemBasedCF implements Model {
 		} else if (st == SimType.CORRELATION_SIM) {
 			simEngine = new CorrelationSimilarity(itemSets);
 		}
+		this.hoodSize = hoodSize;
 	}
 	
 	@Override
@@ -129,7 +131,7 @@ public class ItemBasedCF implements Model {
 			sims.add(new OrderedPair<Double, Integer>(simEngine.similarity(i, d.getItem()), i));
 		}
 		
-		int toFind = 20;
+		int toFind = hoodSize;
 		double pred = 0;
 		double div = 1e-10;
 		for (OrderedPair<Double, Integer> op : sims) {
@@ -146,5 +148,10 @@ public class ItemBasedCF implements Model {
 			throw new ArithmeticException();
 		}
 		return pred/div;
+	}
+	
+	@Override
+	public String getDescription() {
+		return String.format("itemBasedCF,%s,%d",simEngine,hoodSize);
 	}
 }

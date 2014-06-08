@@ -13,11 +13,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.nuiz.guessUserMean.GuessZero;
 import org.nuiz.itemBasedCF.ItemBasedCF;
+import org.nuiz.leastSquaresBaseline.LeastSquaresBaseline;
 import org.nuiz.parallelPLSA.PLSA;
 import org.nuiz.parallelRecommend.*;
 import org.nuiz.slopeOne.SlopeOne;
 import org.nuiz.svd.SVDModel;
-import org.nuiz.svdpp.SvdPPModel;
 import org.nuiz.userBasedCF.UserBasedCF;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -64,6 +64,8 @@ public class Starter {
 					nodeName.equals("crossVal") || 
 					nodeName.equals("examineUser")) {
 				runnableParser(nl.item(i));
+			} else if (nodeName.equals("multiCV")) {
+				multiCVParser(nl.item(i));
 			}
 		}
 	}
@@ -74,7 +76,7 @@ public class Starter {
 		DataList dataList = dataListParser(nl.item(3));
 		Model model = modelParser(nl.item(5));
 		
-		OutputStream os = outFname.equals("-") ? System.out : new FileOutputStream(outFname);
+		OutputStream os = outFname.equals("-") ? System.out : new FileOutputStream(outFname, true);
 		
 		if (runnableNode.getNodeName().equals("holdOut")){
 			holdOutParser(os, dataList, model, runnableNode);
@@ -88,12 +90,26 @@ public class Starter {
 		}
 		
 		os.close();
-	}
+	}	
+	
+	private static void multiCVParser(Node runnableNode) throws InterruptedException, ExecutionException, IOException {
+		NodeList nl = runnableNode.getChildNodes();
+		String outFname = nl.item(1).getTextContent();
+		DataList dataList = dataListParser(nl.item(3));
+		int randomSeed = Integer.parseInt(nl.item(5).getTextContent());
+		int folds = Integer.parseInt((nl.item(7).getTextContent()));
+		OutputStream os = outFname.equals("-") ? System.out : new FileOutputStream(outFname, true);
+		
+		for (int i = 9; i < nl.getLength(); i += 2){
+			Model model = modelParser(nl.item(i));
+			new CVRunner(dataList, model, randomSeed, folds, os);
+		}
+	}	
 	
 	private static void holdOutParser(OutputStream outStream, DataList dataList, Model model, Node node) throws IOException, InterruptedException, ExecutionException {
 		int randomSeed = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
 		int testSize = Integer.parseInt((node.getChildNodes().item(9).getTextContent()));
-		System.out.printf("holdout: %d %d\n", randomSeed, testSize);
+		//System.out.printf("holdout: %d %d\n", randomSeed, testSize);
 		
 		new HoldoutRunner(dataList, model, randomSeed, testSize, outStream);
 	}
@@ -101,15 +117,15 @@ public class Starter {
 	private static void crossValParser(OutputStream outStream, DataList dataList, Model model, Node node) throws InterruptedException, ExecutionException {
 		int randomSeed = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
 		int folds = Integer.parseInt((node.getChildNodes().item(9).getTextContent()));
-		System.out.printf("crossVal: %d %d\n", randomSeed, folds);
+		//System.out.printf("crossVal: %d %d\n", randomSeed, folds);
 		new CVRunner(dataList, model, randomSeed, folds, outStream);
-	}	
+	}
 	
 	private static void examineUserParser(OutputStream outStream, DataList dataList, Model model, Node node) throws IOException, InterruptedException, ExecutionException {
 		int userNumber = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
 		String moviesFile = node.getChildNodes().item(9).getTextContent();
 		String separator = node.getChildNodes().item(11).getTextContent();
-		System.out.printf("examineUser: %d\n", userNumber);
+		//System.out.printf("examineUser: %d\n", userNumber);
 		new UserExaminer(dataList, model, userNumber, moviesFile, separator, outStream);
 	}
 	
@@ -138,7 +154,7 @@ public class Starter {
 			return userBasedParser(modelNode);
 		} else if (modelNode.getNodeName().equals("svd")) {
 			return svdParser(modelNode);
-		} else if (modelNode.getNodeName().equals("svdpp")) {
+		} else if (modelNode.getNodeName().equals("leastSquaresBaseline")) {
 			return svdppParser(modelNode);
 		} else {
 			throw new IllegalArgumentException();
@@ -174,7 +190,7 @@ public class Starter {
 		int steps = Integer.parseInt(node.getChildNodes().item(1).getTextContent());
 		int classes = Integer.parseInt((node.getChildNodes().item(3).getTextContent()));
 		int holdoutCases = Integer.parseInt((node.getChildNodes().item(5).getTextContent()));
-		System.out.printf("PLSA: %d %d %d\n", steps, classes, holdoutCases);
+		//System.out.printf("PLSA: %d %d %d\n", steps, classes, holdoutCases);
 		
 		return new PLSA(steps, classes);
 	}
@@ -182,6 +198,7 @@ public class Starter {
 	private static Model itemBasedParser(Node node){
 		NodeList nl = node.getChildNodes();
 		String simType = nl.item(1).getNodeName();
+		int hoodSize = Integer.parseInt(node.getChildNodes().item(3).getTextContent());
 		ItemBasedCF.SimType st;
 		if (simType.equals("cosineSimilarity")) {
 			st = ItemBasedCF.SimType.COSINE_SIM;
@@ -193,12 +210,13 @@ public class Starter {
 			throw new IllegalArgumentException();
 		}
 		
-		return new ItemBasedCF(st);
+		return new ItemBasedCF(st, hoodSize);
 	}
 	
 	private static Model userBasedParser(Node node){
 		NodeList nl = node.getChildNodes();
 		String simType = nl.item(1).getNodeName();
+		int hoodSize = Integer.parseInt(node.getChildNodes().item(3).getTextContent());
 		UserBasedCF.SimType st;
 		if (simType.equals("cosineSimilarity")) {
 			st = UserBasedCF.SimType.COSINE_SIM;
@@ -210,7 +228,7 @@ public class Starter {
 			throw new IllegalArgumentException();
 		}
 		
-		return new UserBasedCF(st);
+		return new UserBasedCF(st, hoodSize);
 	}
 	
 	private static Model svdParser(Node node){
@@ -227,6 +245,6 @@ public class Starter {
 		NodeList nl = node.getChildNodes();
 		Double lambda1 = Double.parseDouble((nl.item(1).getTextContent()));
 		
-		return new SvdPPModel(lambda1);
+		return new LeastSquaresBaseline(lambda1);
 	}
 }

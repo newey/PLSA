@@ -18,6 +18,7 @@
 					<xs:element name="holdOut" type="HoldOut"/>
 					<xs:element name="crossVal" type="CrossVal"/>
 					<xs:element name="examineUser" type="ExamineUser"/>
+					<xs:element name="multiCV" type="MultiCV"/>
 				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>
@@ -76,7 +77,7 @@
 				<xs:element name="itemBased" type="ItemBased"/>
 				<xs:element name="userBased" type="UserBased"/>
 				<xs:element name="svd" type="SVD"/>
-				<xs:element name="svdpp" type="SVDPP"/>
+				<xs:element name="leastSquaresBaseline" type="LeastSquaresBaseline"/>
 			</xs:choice>
 		</xs:sequence>
 	</xs:complexType>
@@ -111,6 +112,27 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	<xs:complexType name="MultiCV">
+		<xs:sequence>
+			<xs:element name="outputFile" type="xs:string"/>
+			<xs:choice>
+				<xs:element name="fileDatalist" type="FileDataList"/>
+				<xs:element name="binaryFileDatalist" type="BinaryFileDataList"/>
+				<xs:element name="normaliseDataList" type="NormaliseDataList"/>
+			</xs:choice>
+			<xs:element name="randomSeed" type="xs:integer"/>
+			<xs:element name="folds" type="xs:integer"/>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element name="plsa" type="PLSA"/>
+				<xs:element name="slopeOne" type="SlopeOne"/>
+				<xs:element name="guessZero" type="GuessZero"/>
+				<xs:element name="itemBased" type="ItemBased"/>
+				<xs:element name="userBased" type="UserBased"/>
+				<xs:element name="svd" type="SVD"/>
+				<xs:element name="leastSquaresBaseline" type="LeastSquaresBaseline"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
 	<!-- End Runner description -->
 	
 	
@@ -138,6 +160,7 @@
 						<xs:element name="adjustedCosineSimilarity"/>
 						<xs:element name="correlationSimilarity"/>
 					</xs:choice>
+					<xs:element name="numNeighbors" type="xs:integer"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -151,6 +174,7 @@
 						<xs:element name="adjustedCosineSimilarity"/>
 						<xs:element name="correlationSimilarity"/>
 					</xs:choice>
+					<xs:element name="numNeighbors" type="xs:integer"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -167,7 +191,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="SVDPP">
+	<xs:complexType name="LeastSquaresBaseline">
 		<xs:complexContent>
 			<xs:extension base="Model">
 				<xs:sequence>

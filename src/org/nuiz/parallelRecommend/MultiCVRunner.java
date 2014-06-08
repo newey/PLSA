@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
  * 
  * @author Robert Newey
  */
-public class CVRunner {
+public class MultiCVRunner {
 
 	/**
 	 * Runs cross validation over dataList, given some model, randomSeed, number of folds,
@@ -24,7 +24,7 @@ public class CVRunner {
 	 * @throws ExecutionException 
 	 * @throws InterruptedException 
 	 */
-	public CVRunner(DataList dataList, Model model, int randomSeed, int folds,
+	public MultiCVRunner(DataList dataList, Model model, int randomSeed, int folds,
 			OutputStream out) throws InterruptedException, ExecutionException {
 		double RMS = 0;
 		double RMS2 = 0;

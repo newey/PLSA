@@ -67,4 +67,10 @@ public class CorrelationSimilarity extends SimilarityEngine {
 		return dotProduct/(aLen*bLen);
 	}
 
+	
+	@Override
+	public String toString(){
+		return "CorrelationSimilarity";
+	}
+	
 }
