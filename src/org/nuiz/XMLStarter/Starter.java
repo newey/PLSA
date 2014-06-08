@@ -192,9 +192,11 @@ public class Starter {
 		}
 	}
 	
-	private static Model modelParser(Node modelNode) {
+	private static Model modelParser(Node modelNode) throws IOException {
 		if (modelNode.getNodeName().equals("plsa")) {
 			return plsaParser(modelNode);
+		} else if (modelNode.getNodeName().equals("plsaUserData")) {
+			return plsaUserDataParser(modelNode);
 		} else if (modelNode.getNodeName().equals("slopeOne")) {
 			return new SlopeOne();
 		} else if (modelNode.getNodeName().equals("guessZero")) {
@@ -244,6 +246,16 @@ public class Starter {
 		//System.out.printf("PLSA: %d %d %d\n", steps, classes, holdoutCases);
 		
 		return new PLSA(steps, classes);
+	}	
+	
+	private static Model plsaUserDataParser(Node node) throws IOException{
+		int steps = Integer.parseInt(node.getChildNodes().item(1).getTextContent());
+		int classes = Integer.parseInt((node.getChildNodes().item(3).getTextContent()));
+		String userFileName  = node.getChildNodes().item(7).getTextContent();
+		//System.out.printf("PLSA: %d %d %d\n", steps, classes, holdoutCases);
+		DataList uData = new UserFileDataList(userFileName, "::");
+		
+		return new PLSA(steps, classes, uData);
 	}
 	
 	private static Model itemBasedParser(Node node){

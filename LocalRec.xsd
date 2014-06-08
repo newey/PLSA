@@ -72,6 +72,7 @@
 			</xs:choice>
 			<xs:choice>
 				<xs:element name="plsa" type="PLSA"/>
+				<xs:element name="plsaUserData" type="PLSAwUserData"/>
 				<xs:element name="slopeOne" type="SlopeOne"/>
 				<xs:element name="guessZero" type="GuessZero"/>
 				<xs:element name="itemBased" type="ItemBased"/>
@@ -124,6 +125,7 @@
 			<xs:element name="testSize" type="xs:integer"/>
 			<xs:choice minOccurs="1" maxOccurs="unbounded">
 				<xs:element name="plsa" type="PLSA"/>
+				<xs:element name="plsaUserData" type="PLSAwUserData"/>
 				<xs:element name="slopeOne" type="SlopeOne"/>
 				<xs:element name="guessZero" type="GuessZero"/>
 				<xs:element name="itemBased" type="ItemBased"/>
@@ -145,6 +147,18 @@
 					<xs:element name="steps" type="xs:integer"/>
 					<xs:element name="classes" type="xs:integer"/>
 					<xs:element name="holdOutCases" type="xs:integer"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="PLSAwUserData">
+		<xs:complexContent>
+			<xs:extension base="Model">
+				<xs:sequence>
+					<xs:element name="steps" type="xs:integer"/>
+					<xs:element name="classes" type="xs:integer"/>
+					<xs:element name="holdOutCases" type="xs:integer"/>
+					<xs:element name="userFile" type="xs:string"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
