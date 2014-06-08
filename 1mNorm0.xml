@@ -17,7 +17,6 @@
 		<randomSeed>1</randomSeed>
 		<testSize>200000</testSize>
 		<guessZero/>
-		<slopeOne/>
 		<itemBased>
 			<cosineSimilarity/>
 			<numNeighbors>1</numNeighbors>
@@ -74,70 +73,10 @@
 			<adjustedCosineSimilarity/>
 			<numNeighbors>20</numNeighbors>
 		</itemBased>
-		<userBased>
+		<itemBased>
 			<correlationSimilarity/>
 			<numNeighbors>20</numNeighbors>
-		</userBased>
-		<userBased>
-			<cosineSimilarity/>
-			<numNeighbors>1</numNeighbors>
-		</userBased>
-		<userBased>
-			<adjustedCosineSimilarity/>
-			<numNeighbors>1</numNeighbors>
-		</userBased>
-		<userBased>
-			<correlationSimilarity/>
-			<numNeighbors>1</numNeighbors>
-		</userBased>
-		<userBased>
-			<cosineSimilarity/>
-			<numNeighbors>3</numNeighbors>
-		</userBased>
-		<userBased>
-			<adjustedCosineSimilarity/>
-			<numNeighbors>3</numNeighbors>
-		</userBased>
-		<userBased>
-			<correlationSimilarity/>
-			<numNeighbors>3</numNeighbors>
-		</userBased>
-		<userBased>
-			<cosineSimilarity/>
-			<numNeighbors>5</numNeighbors>
-		</userBased>
-		<userBased>
-			<adjustedCosineSimilarity/>
-			<numNeighbors>5</numNeighbors>
-		</userBased>
-		<userBased>
-			<correlationSimilarity/>
-			<numNeighbors>5</numNeighbors>
-		</userBased>
-		<userBased>
-			<cosineSimilarity/>
-			<numNeighbors>10</numNeighbors>
-		</userBased>
-		<userBased>
-			<adjustedCosineSimilarity/>
-			<numNeighbors>10</numNeighbors>
-		</userBased>
-		<userBased>
-			<correlationSimilarity/>
-			<numNeighbors>10</numNeighbors>
-		</userBased>
-		<userBased>
-			<cosineSimilarity/>
-			<numNeighbors>20</numNeighbors>
-		</userBased>
-		<userBased>
-			<adjustedCosineSimilarity/>
-			<numNeighbors>20</numNeighbors>
-		</userBased>
-		<userBased>
-			<correlationSimilarity/>
-			<numNeighbors>20</numNeighbors>
-		</userBased>
+		</itemBased>
 		<plsa>
 			<steps>2</steps>
 			<classes>1</classes>
