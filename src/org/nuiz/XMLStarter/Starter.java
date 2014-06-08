@@ -67,8 +67,8 @@ public class Starter {
 					nodeName.equals("crossVal") || 
 					nodeName.equals("examineUser")) {
 				runnableParser(nl.item(i));
-			} else if (nodeName.equals("multiCV")) {
-				multiCVParser(nl.item(i));
+			} else if (nodeName.equals("multiHoldOut")) {
+				multiHoldoutParser(nl.item(i));
 			}
 		}
 	}
@@ -95,34 +95,37 @@ public class Starter {
 		os.close();
 	}	
 	
-	private static void multiCVParser(Node runnableNode) throws InterruptedException, ExecutionException, IOException {
+	private static void multiHoldoutParser(Node runnableNode) throws InterruptedException, ExecutionException, IOException {
 		NodeList nl = runnableNode.getChildNodes();
 		String outFname = nl.item(1).getTextContent();
 		DataList dataList = dataListParser(nl.item(3));
 		int randomSeed = Integer.parseInt(nl.item(5).getTextContent());
-		int folds = Integer.parseInt((nl.item(7).getTextContent()));
+		int testSize = Integer.parseInt((nl.item(7).getTextContent()));
 		OutputStream os = outFname.equals("-") ? System.out : new FileOutputStream(outFname, true);
 		
 		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
 		
-		class CVRunnable implements Runnable {
+		class HoldOutRunnable implements Runnable {
 			DataList dataList;
 			Model model;
 			int randomSeed;
-			int folds;
+			int testSize;
 			OutputStream os;
-			public CVRunnable (DataList dl, Model m, int rs, int f, OutputStream o) {
+			public HoldOutRunnable (DataList dl, Model m, int rs, int s, OutputStream o) {
 				dataList = dl;
 				model = m;
 				randomSeed = rs;
-				folds = f;
+				testSize = s;
 				os = o;
 			}
 			
 			@Override
 			public void run() {
 				try {
-					new CVRunner(dataList, model, randomSeed, folds, os);
+					new HoldoutRunner(dataList, model, randomSeed, testSize, os);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -133,10 +136,11 @@ public class Starter {
 			}
 			
 		}
+		
 		Vector<Future<?>> tasks = new Vector<Future<?>>();
 		for (int i = 9; i < nl.getLength(); i += 2){
 			Model model = modelParser(nl.item(i));
-			tasks.add(ex.submit(new CVRunnable(dataList, model, randomSeed, folds, os)));	
+			tasks.add(ex.submit(new HoldOutRunnable(dataList, model, randomSeed, testSize, os)));	
 		}
 		
 		for (Future <?> f : tasks){

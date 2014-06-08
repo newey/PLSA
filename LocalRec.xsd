@@ -18,7 +18,7 @@
 					<xs:element name="holdOut" type="HoldOut"/>
 					<xs:element name="crossVal" type="CrossVal"/>
 					<xs:element name="examineUser" type="ExamineUser"/>
-					<xs:element name="multiCV" type="MultiCV"/>
+					<xs:element name="multiHoldOut" type="MultiHoldOut"/>
 				</xs:choice>
 			</xs:sequence>
 		</xs:complexType>
@@ -112,7 +112,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="MultiCV">
+	<xs:complexType name="MultiHoldOut">
 		<xs:sequence>
 			<xs:element name="outputFile" type="xs:string"/>
 			<xs:choice>
@@ -121,7 +121,7 @@
 				<xs:element name="normaliseDataList" type="NormaliseDataList"/>
 			</xs:choice>
 			<xs:element name="randomSeed" type="xs:integer"/>
-			<xs:element name="folds" type="xs:integer"/>
+			<xs:element name="testSize" type="xs:integer"/>
 			<xs:choice minOccurs="1" maxOccurs="unbounded">
 				<xs:element name="plsa" type="PLSA"/>
 				<xs:element name="slopeOne" type="SlopeOne"/>

@@ -34,6 +34,6 @@ public class HoldoutRunner {
 		
 		Rater r = new Rater(trainData, testData, model);
 		
-		outPrint.printf("ABS: %f\t RMS: %f\n", r.ABS, r.RMS);
+		outPrint.printf("%f,%f,%s\n", r.ABS, r.RMS, model.getDescription());
 	}
 }

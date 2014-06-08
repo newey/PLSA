@@ -83,7 +83,7 @@ public class ItemBasedCF implements Model {
 		List <Future<Vector<Double>>> results = null;
 		Vector <Double> retval = new Vector<Double>();
 		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
-		int splits = GlobalSettings.getNumThreads()*2;
+		int splits = GlobalSettings.getNumThreads();
 		int splitSize = data.getSize()/splits;
 		int prev = 0;
 		Vector<Callable<Vector<Double>>> tasks = new Vector<Callable<Vector<Double>>>();
