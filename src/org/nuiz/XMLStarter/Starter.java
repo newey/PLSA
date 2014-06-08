@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -131,11 +133,22 @@ public class Starter {
 			}
 			
 		}
-		
+		Vector<Future<?>> tasks = new Vector<Future<?>>();
 		for (int i = 9; i < nl.getLength(); i += 2){
 			Model model = modelParser(nl.item(i));
-			ex.submit(new CVRunnable(dataList, model, randomSeed, folds, os));
-			
+			tasks.add(ex.submit(new CVRunnable(dataList, model, randomSeed, folds, os)));	
+		}
+		
+		for (Future <?> f : tasks){
+			try {
+				f.get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			}
 		}
 	}
 	
