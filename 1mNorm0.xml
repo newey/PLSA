@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:ns="LocalRec"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="/Users/robert/Documents/ScalaWorkspace/LocalRec/LocalRec.xsd">
+	<globalSettings>
+		<numThreads>32</numThreads>
+	</globalSettings>
+	<multiHoldOut>
+		<outputFile>/home/ubuntu/1mNorm0.csv</outputFile>
+		<normaliseDataList>
+			<normalisationFactor>0</normalisationFactor>
+			<binaryFileDatalist>
+				<inputFile>ml-1m/ratings.dat</inputFile>
+			</binaryFileDatalist>
+		</normaliseDataList>
+		<randomSeed>1</randomSeed>
+		<testSize>200000</testSize>
+		<guessZero/>
+		<plsa>
+			<steps>2</steps>
+			<classes>3</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+	</multiHoldOut>
+</config>
