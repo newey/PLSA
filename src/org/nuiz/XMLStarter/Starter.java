@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -100,11 +101,45 @@ public class Starter {
 		int folds = Integer.parseInt((nl.item(7).getTextContent()));
 		OutputStream os = outFname.equals("-") ? System.out : new FileOutputStream(outFname, true);
 		
+		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
+		
+		class CVRunnable implements Runnable {
+			DataList dataList;
+			Model model;
+			int randomSeed;
+			int folds;
+			OutputStream os;
+			public CVRunnable (DataList dl, Model m, int rs, int f, OutputStream o) {
+				dataList = dl;
+				model = m;
+				randomSeed = rs;
+				folds = f;
+				os = o;
+			}
+			
+			@Override
+			public void run() {
+				try {
+					new CVRunner(dataList, model, randomSeed, folds, os);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
 		for (int i = 9; i < nl.getLength(); i += 2){
 			Model model = modelParser(nl.item(i));
-			new CVRunner(dataList, model, randomSeed, folds, os);
+			ex.submit(new CVRunnable(dataList, model, randomSeed, folds, os));
+			
 		}
-	}	
+	}
+	
+	
 	
 	private static void holdOutParser(OutputStream outStream, DataList dataList, Model model, Node node) throws IOException, InterruptedException, ExecutionException {
 		int randomSeed = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
