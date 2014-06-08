@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.Vector;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -36,15 +37,15 @@ public class UserBasedCF implements Model {
 	}
 	
 	private Map<Integer, Double> itemAvg;
-	private HashMap <Integer, Map<Integer, Double>> userSets;
-	private HashMap <Integer, Map<Integer, Double>> itemRatings;
+	private Map <Integer, Map<Integer, Double>> userSets;
+	private Map <Integer, Map<Integer, Double>> itemRatings;
 	private SimilarityEngine simEngine;
 	private final int hoodSize;
 	
 	public UserBasedCF(SimType st, int hoodSize){
-		itemAvg = new HashMap<Integer, Double>();
-		userSets = new HashMap<Integer, Map<Integer,Double>>();
-		itemRatings = new HashMap<Integer, Map<Integer,Double>>();
+		itemAvg = new ConcurrentHashMap<Integer, Double>();
+		userSets = new ConcurrentHashMap<Integer, Map<Integer,Double>>();
+		itemRatings = new ConcurrentHashMap<Integer, Map<Integer,Double>>();
 		if (st == SimType.COSINE_SIM){
 			simEngine = new CosineSimilarity(userSets);
 		} else if (st == SimType.ADJUSTED_COSINE_SIM) {
@@ -83,7 +84,7 @@ public class UserBasedCF implements Model {
 		List <Future<Vector<Double>>> results = null;
 		Vector <Double> retval = new Vector<Double>();
 		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
-		int splits = GlobalSettings.getNumThreads()*2;
+		int splits = 4;
 		int splitSize = data.getSize()/splits;
 		int prev = 0;
 		Vector<Callable<Vector<Double>>> tasks = new Vector<Callable<Vector<Double>>>();
@@ -131,7 +132,7 @@ public class UserBasedCF implements Model {
 			sims.add(new OrderedPair<Double, Integer>(simEngine.similarity(i, d.getUser()), i));
 		}
 		
-		int toFind = 20;
+		int toFind = hoodSize;
 		double pred = 0;
 		double div = 1e-10;
 		for (OrderedPair<Double, Integer> op : sims) {

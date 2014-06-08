@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.Vector;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -36,14 +37,14 @@ public class ItemBasedCF implements Model {
 	}
 	
 	private Map<Integer, Double> userAvg;
-	private HashMap <Integer, Map<Integer, Double>> itemSets;
+	private ConcurrentHashMap<Integer, Map<Integer, Double>> itemSets;
 	private HashMap <Integer, Map<Integer, Double>> userRatings;
 	private SimilarityEngine simEngine;
 	private final int hoodSize;
 	
 	public ItemBasedCF(SimType st, int hoodSize){
 		userAvg = new HashMap<Integer, Double>();
-		itemSets = new HashMap<Integer, Map<Integer,Double>>();
+		itemSets = new ConcurrentHashMap<Integer, Map<Integer,Double>>();
 		userRatings = new HashMap<Integer, Map<Integer,Double>>();
 		if (st == SimType.COSINE_SIM){
 			simEngine = new CosineSimilarity(itemSets);
@@ -83,7 +84,7 @@ public class ItemBasedCF implements Model {
 		List <Future<Vector<Double>>> results = null;
 		Vector <Double> retval = new Vector<Double>();
 		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
-		int splits = GlobalSettings.getNumThreads();
+		int splits = 4;
 		int splitSize = data.getSize()/splits;
 		int prev = 0;
 		Vector<Callable<Vector<Double>>> tasks = new Vector<Callable<Vector<Double>>>();
