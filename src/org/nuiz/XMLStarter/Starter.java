@@ -38,13 +38,9 @@ public class Starter {
 	
 	/**
 	 * @param args First element must a path to the xml configuraiton file.
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, InterruptedException, ExecutionException {
+	public static void main(String[] args) throws Exception {
 		String fname = args[0];
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -56,7 +52,7 @@ public class Starter {
 		GlobalSettings.getExecutor().shutdown();
 	}
 	
-	private static void configParser(Node config) throws IOException, InterruptedException, ExecutionException {
+	private static void configParser(Node config) throws Exception {
 		NodeList nl = config.getChildNodes();
 		
 		GlobalSettings.parseGlobalSettings(nl.item(1));
@@ -73,7 +69,7 @@ public class Starter {
 		}
 	}
 
-	private static void runnableParser(Node runnableNode) throws IOException, InterruptedException, ExecutionException {
+	private static void runnableParser(Node runnableNode) throws Exception {
 		NodeList nl = runnableNode.getChildNodes();
 		String outFname = nl.item(1).getTextContent();
 		DataList dataList = dataListParser(nl.item(3));
@@ -132,6 +128,9 @@ public class Starter {
 				} catch (ExecutionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			
@@ -158,7 +157,7 @@ public class Starter {
 	
 	
 	
-	private static void holdOutParser(OutputStream outStream, DataList dataList, Model model, Node node) throws IOException, InterruptedException, ExecutionException {
+	private static void holdOutParser(OutputStream outStream, DataList dataList, Model model, Node node) throws Exception {
 		int randomSeed = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
 		int testSize = Integer.parseInt((node.getChildNodes().item(9).getTextContent()));
 		//System.out.printf("holdout: %d %d\n", randomSeed, testSize);
@@ -166,14 +165,14 @@ public class Starter {
 		new HoldoutRunner(dataList, model, randomSeed, testSize, outStream);
 	}
 	
-	private static void crossValParser(OutputStream outStream, DataList dataList, Model model, Node node) throws InterruptedException, ExecutionException {
+	private static void crossValParser(OutputStream outStream, DataList dataList, Model model, Node node) throws Exception {
 		int randomSeed = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
 		int folds = Integer.parseInt((node.getChildNodes().item(9).getTextContent()));
 		//System.out.printf("crossVal: %d %d\n", randomSeed, folds);
 		new CVRunner(dataList, model, randomSeed, folds, outStream);
 	}
 	
-	private static void examineUserParser(OutputStream outStream, DataList dataList, Model model, Node node) throws IOException, InterruptedException, ExecutionException {
+	private static void examineUserParser(OutputStream outStream, DataList dataList, Model model, Node node) throws Exception {
 		int userNumber = Integer.parseInt(node.getChildNodes().item(7).getTextContent());
 		String moviesFile = node.getChildNodes().item(9).getTextContent();
 		String separator = node.getChildNodes().item(11).getTextContent();

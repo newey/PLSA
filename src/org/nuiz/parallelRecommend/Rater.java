@@ -18,10 +18,9 @@ class Rater {
 	 * @param train
 	 * @param test
 	 * @param model
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
-	public Rater (DataList train, DataList test, Model model) throws InterruptedException, ExecutionException{
+	public Rater (DataList train, DataList test, Model model) throws Exception{
 		model.fit(train);
 		Iterable <Double> preds = model.predict(test);
 		Iterator <Double> predIt = preds.iterator();

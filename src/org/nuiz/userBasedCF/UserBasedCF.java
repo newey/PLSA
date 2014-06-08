@@ -80,8 +80,8 @@ public class UserBasedCF implements Model {
 	}
 
 	@Override
-	public Iterable<Double> predict(DataList data) throws InterruptedException, ExecutionException {
-		List <Future<Vector<Double>>> results = null;
+	public Iterable<Double> predict(DataList data) throws Exception {
+		/*List <Future<Vector<Double>>> results = null;
 		Vector <Double> retval = new Vector<Double>();
 		ThreadPoolExecutor ex = GlobalSettings.getExecutor();
 		int splits = 4;
@@ -101,7 +101,8 @@ public class UserBasedCF implements Model {
 		for (Future<Vector<Double>> f : results) {
 			retval.addAll(f.get());
 		}
-		return retval;
+		return retval;*/
+		return (new WeightedCallable(data.iterator())).call();
 	}
 	
 	private class WeightedCallable implements Callable<Vector<Double>> {

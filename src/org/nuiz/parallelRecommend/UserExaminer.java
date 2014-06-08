@@ -34,11 +34,9 @@ public class UserExaminer {
 	 * @param moviesFile Path to file with movie titles in it.
 	 * @param separator Separator to use in the moviesFile
 	 * @param outputFile Where to write output.
-	 * @throws IOException
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
-	public UserExaminer (DataList dataList, Model model, int user, String moviesFile, String separator, OutputStream outputFile) throws IOException, InterruptedException, ExecutionException {
+	public UserExaminer (DataList dataList, Model model, int user, String moviesFile, String separator, OutputStream outputFile) throws Exception {
 		model.fit(dataList);
 		PrintStream outPrint = new PrintStream(outputFile);
 		HashMap<Integer, String> movieTitles = new HashMap<Integer, String>();

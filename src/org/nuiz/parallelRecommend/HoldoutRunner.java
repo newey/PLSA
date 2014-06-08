@@ -20,12 +20,10 @@ public class HoldoutRunner {
 	 * @param seed Random seed to use.
 	 * @param testSize Size of the test set
 	 * @param outputFile Where to write the output to
-	 * @throws IOException
-	 * @throws ExecutionException 
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
 	public HoldoutRunner(DataList data, Model model, int seed, int testSize,
-			OutputStream outputFile) throws IOException, InterruptedException, ExecutionException {		
+			OutputStream outputFile) throws Exception {		
 		PrintStream outPrint = new PrintStream(outputFile);
 		
 		DataList testData = data.getSubDataList(0, testSize);
