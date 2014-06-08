@@ -4,7 +4,7 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xsi:schemaLocation="/Users/robert/Documents/ScalaWorkspace/LocalRec/LocalRec.xsd">
 	<globalSettings>
-		<numThreads>32</numThreads>
+		<numThreads>64</numThreads>
 	</globalSettings>
 	<multiHoldOut>
 		<outputFile>-</outputFile>
@@ -109,6 +109,16 @@
 			<holdOutCases>1000</holdOutCases>
 		</plsa>
 		<plsa>
+			<steps>60</steps>
+			<classes>1</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+		<plsa>
+			<steps>80</steps>
+			<classes>1</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+		<plsa>
 			<steps>2</steps>
 			<classes>3</classes>
 			<holdOutCases>1000</holdOutCases>
@@ -139,6 +149,16 @@
 			<holdOutCases>1000</holdOutCases>
 		</plsa>
 		<plsa>
+			<steps>60</steps>
+			<classes>3</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+		<plsa>
+			<steps>80</steps>
+			<classes>3</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+		<plsa>
 			<steps>2</steps>
 			<classes>5</classes>
 			<holdOutCases>1000</holdOutCases>
@@ -168,7 +188,16 @@
 			<classes>5</classes>
 			<holdOutCases>1000</holdOutCases>
 		</plsa>
-		
+		<plsa>
+			<steps>60</steps>
+			<classes>5</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+		<plsa>
+			<steps>80</steps>
+			<classes>5</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
 		<plsa>
 			<steps>2</steps>
 			<classes>10</classes>
@@ -199,7 +228,16 @@
 			<classes>10</classes>
 			<holdOutCases>1000</holdOutCases>
 		</plsa>
-
+		<plsa>
+			<steps>60</steps>
+			<classes>10</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
+		<plsa>
+			<steps>80</steps>
+			<classes>10</classes>
+			<holdOutCases>1000</holdOutCases>
+		</plsa>
 		<plsaUserData>
 			<steps>2</steps>
 			<classes>1</classes>
@@ -237,6 +275,18 @@
 			<userFile>ml-1m/users.dat</userFile>
 		</plsaUserData>
 		<plsaUserData>
+			<steps>60</steps>
+			<classes>1</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
+			<steps>80</steps>
+			<classes>1</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
 			<steps>2</steps>
 			<classes>3</classes>
 			<holdOutCases>1000</holdOutCases>
@@ -273,6 +323,18 @@
 			<userFile>ml-1m/users.dat</userFile>
 		</plsaUserData>
 		<plsaUserData>
+			<steps>60</steps>
+			<classes>3</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
+			<steps>80</steps>
+			<classes>3</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
 			<steps>2</steps>
 			<classes>5</classes>
 			<holdOutCases>1000</holdOutCases>
@@ -309,6 +371,18 @@
 			<userFile>ml-1m/users.dat</userFile>
 		</plsaUserData>
 		<plsaUserData>
+			<steps>60</steps>
+			<classes>5</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
+			<steps>80</steps>
+			<classes>5</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
 			<steps>2</steps>
 			<classes>10</classes>
 			<holdOutCases>1000</holdOutCases>
@@ -340,6 +414,18 @@
 		</plsaUserData>
 		<plsaUserData>
 			<steps>40</steps>
+			<classes>10</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
+			<steps>60</steps>
+			<classes>10</classes>
+			<holdOutCases>1000</holdOutCases>
+			<userFile>ml-1m/users.dat</userFile>
+		</plsaUserData>
+		<plsaUserData>
+			<steps>80</steps>
 			<classes>10</classes>
 			<holdOutCases>1000</holdOutCases>
 			<userFile>ml-1m/users.dat</userFile>
