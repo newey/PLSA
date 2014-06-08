@@ -7,11 +7,11 @@
 		<numThreads>32</numThreads>
 	</globalSettings>
 	<multiHoldOut>
-		<outputFile>/home/ubuntu/1mNorm0.csv</outputFile>
+		<outputFile>-</outputFile>
 		<normaliseDataList>
 			<normalisationFactor>0</normalisationFactor>
 			<binaryFileDatalist>
-				<inputFile>ml-1m/ratings.dat</inputFile>
+				<inputFile>ml-1m/ratingsBin.dat</inputFile>
 			</binaryFileDatalist>
 		</normaliseDataList>
 		<randomSeed>1</randomSeed>
