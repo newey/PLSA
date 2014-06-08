@@ -147,7 +147,7 @@ public class ItemBasedCF implements Model {
 			}
 		}
 		if (Double.isNaN(div) || Double.isNaN(pred) || div == 0 || Double.isNaN(pred/div)) {
-			throw new ArithmeticException();
+			return 0;
 		}
 		return pred/div;
 	}
